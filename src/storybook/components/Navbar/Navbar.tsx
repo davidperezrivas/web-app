@@ -19,16 +19,12 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
   const [activeName, setActiveName] = useState('');
   const activeLink = window.location.pathname;
 
+  /* Constants */
+  const isExpandOnHover = false;
+
   const listRef = useRef<Record<string, HTMLUListElement | null>>({});
 
   const [isExpand, setIsExpand] = useState(true);
-  const [isExpandOnHover, setIsExpandOnHover] = useState(false);
-
-  const handleHoverExpand = (value: boolean) => {
-    if (!isExpand) {
-      setIsExpandOnHover(value);
-    }
-  };
 
   const handleNavigate = (path: string) => {
     setActiveName(path);
@@ -231,6 +227,7 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
     );
   };
 
+  console.log('sidebarStructure', sidebarStructure);
   return (
     <nav
       role="navigation"

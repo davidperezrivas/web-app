@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import './App.css';
-import Navbar from './Components/Navbar/Navbar';
-import Blog from './Components/Blog/Blog';
+import Navbar from '../storybook/components/Navbar/Navbar';
+import Blog from '../pages/Users/Users';
+import { Route, Routes } from 'react-router-dom';
+import Blog1 from '../pages/Blog copy/Blog';
+import Blog2 from '../pages/Blog copy 2/Blog';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -16,7 +18,11 @@ function App() {
           sideMenuIsExpand ? 'md:ml-72' : 'md:ml-20'
         }`}
       >
-        <Blog />
+        <Routes>
+          <Route path="/" element={<Blog />}></Route>
+          <Route path="/blog1" element={<Blog1 />}></Route>
+          <Route path="/blog2" element={<Blog2 />}></Route>
+        </Routes>
       </div>
     </div>
   );

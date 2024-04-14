@@ -227,7 +227,6 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
     );
   };
 
-  console.log('sidebarStructure', sidebarStructure);
   return (
     <nav
       role="navigation"
@@ -259,17 +258,7 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
           />
         </svg>
       </button>
-      <div
-        onMouseEnter={() => {
-          setIsExpand(true);
-          setExpand(true);
-        }}
-        onMouseLeave={() => {
-          setIsExpand(false);
-          setExpand(false);
-        }}
-        className={`relative h-screen overflow-hidden`}
-      >
+      <div className={`relative h-screen overflow-hidden`}>
         <SimpleBar style={{ height: '100%' }} autoHide>
           <div className="text-slate-500">
             <div className="my-8 flex flex-col items-center h-44 overflow-x-hidden">

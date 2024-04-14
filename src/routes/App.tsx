@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Navbar from '../storybook/components/Navbar/Navbar';
-import Blog from '../pages/Users/Users';
+import Sidebar from '../storybook/components/Sidebar/Sidebar';
+import Users from '../pages/Users/Users';
 import { Route, Routes } from 'react-router-dom';
 import Blog1 from '../pages/Blog copy/Blog';
 import Blog2 from '../pages/Blog copy 2/Blog';
@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="relative min-h-screen md:flex">
       {/* sidemenu */}
-      <Navbar setExpand={setSideMenuIsExpand} />
+      <Sidebar setExpand={setSideMenuIsExpand} />
       {/* content */}
       <div
         className={`flex-1 min-h-screen mx-0 bg-slate-100 transition-all duration-300 ease-in-out ${
@@ -19,7 +19,7 @@ function App() {
         }`}
       >
         <Routes>
-          <Route path="/" element={<Blog />}></Route>
+          <Route path="/" element={<Users />}></Route>
           <Route path="/blog1" element={<Blog1 />}></Route>
           <Route path="/blog2" element={<Blog2 />}></Route>
         </Routes>

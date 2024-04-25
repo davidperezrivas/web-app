@@ -5,6 +5,11 @@ export interface ButtonProps {
   text: string;
 
   /**
+   * Tipo de boton
+   */
+  type?: any;
+
+  /**
    * Funcion a ejecutar
    */
 
@@ -17,7 +22,7 @@ export interface ButtonProps {
    * Info
    */
 
-  type: 'error' | 'success' | 'warning' | 'info';
+  status: 'error' | 'success' | 'warning' | 'info';
   /*
    *  Icono que se desea mostar
    *

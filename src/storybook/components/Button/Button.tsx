@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { ButtonProps } from './interface';
 
-const Button = ({ text, type, icon, onClick }: ButtonProps) => {
+const Button = ({ text, status, icon, onClick, type = 'button' }: ButtonProps) => {
   const classButton = useMemo(() => {
-    switch (type) {
+    switch (status) {
       case 'error':
         return 'text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900 inline-flex items-center';
       case 'success':
@@ -15,12 +15,12 @@ const Button = ({ text, type, icon, onClick }: ButtonProps) => {
       default:
         return 'text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 inline-flex items-center';
     }
-  }, [type]);
+  }, [status]);
 
   return (
-    <button type="button" className={classButton} onClick={onClick}>
+    <button type={type} className={classButton} onClick={onClick}>
       {icon}
-      <span className="px-1">{text}</span>
+      {text !== '' ? <span className="px-1">{text}</span> : null}
     </button>
   );
 };

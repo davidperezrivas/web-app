@@ -6,3 +6,9 @@ export default interface User {
   password: string;
   isactive: boolean;
 }
+
+export default interface UserModal {
+  name: string;
+  rut: string;
+  email: string;
+}

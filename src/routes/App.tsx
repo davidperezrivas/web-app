@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from '../storybook/components/Sidebar/Sidebar';
-import Users from '../pages/Users/Users';
+import Users from '../pages/User/Users';
 import { Route, Routes } from 'react-router-dom';
+import Login from '../pages/Login/Login';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -17,7 +18,8 @@ function App() {
         }`}
       >
         <Routes>
-          <Route path="/" element={<Users />}></Route>
+          <Route path="/users" element={<Users />}></Route>
+          <Route path="/" element={<Login />}></Route>
         </Routes>
       </div>
     </div>

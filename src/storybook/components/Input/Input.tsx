@@ -35,7 +35,7 @@ const Input = ({ tittle, name, style, icon, placeholders, error, register, type 
         {...register(name)}
       />
       <p id="helper-text-explanation" className={`mt-2 text-sm italic ${classConfig.explanation}`}>
-        {error.hasOwnProperty(name) ? error[name] : placeholders}
+        {error?.hasOwnProperty(name) ? error[name] : placeholders}
       </p>
     </>
   );

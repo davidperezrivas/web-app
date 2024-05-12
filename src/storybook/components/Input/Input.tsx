@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { InputProps } from './interface';
 
-const Input = ({ tittle, name, style, icon, placeholders, error, register, type }: InputProps) => {
+const Input = ({ tittle, name, appearance, icon, placeholders, error, register, type }: InputProps) => {
   const classConfig = useMemo(() => {
     const config = {
       error: {
@@ -18,14 +18,14 @@ const Input = ({ tittle, name, style, icon, placeholders, error, register, type 
       },
     };
 
-    return config[style] || {};
-  }, [style]);
+    return config[appearance] || {};
+  }, [appearance]);
 
   return (
     <>
       <label className={`block mb-2 text-sm font-medium ${classConfig.label}`}>{tittle}</label>
       <input
-        autocomplete="false"
+        autoComplete="false"
         autofill="off"
         type={type}
         id={name}

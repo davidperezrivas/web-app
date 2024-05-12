@@ -1,5 +1,5 @@
 import User from '../models/Users';
-import { CreateUserModel, UpdateUserModel } from './models/Request.model';
+import { CreateUserModel, UpdateUserModel } from '../models/Request.model';
 import { usersUrlApi } from './url';
 
 export async function getAllUsers(): Promise<User[]> {

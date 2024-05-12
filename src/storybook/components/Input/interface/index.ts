@@ -9,12 +9,12 @@ export interface InputProps {
   placeholders: string;
 
   /*
-   * tipo boton
+   * Apariencia del  boton
    * Error
    * info
    */
 
-  style: 'error' | 'info';
+  appearance: 'error' | 'info';
 
   /*
    *  Icono que se desea mostrar

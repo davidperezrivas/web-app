@@ -3,17 +3,22 @@ import { FC, useRef, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import { sidebarStructure } from './structure';
+import { useAppSelector } from '../../../hooks/store';
+import { useUserActions } from '../../../hooks/useLoginActions';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
   setExpand: (value: boolean) => void;
 }
 
 const Navbar: FC<SidebarProps> = ({ setExpand }) => {
-  const username = 'Miles Heizer';
-  const company = 'Unilever';
+  const login = useAppSelector((state) => state.login);
+  const { logout } = useUserActions();
+  const navigate = useNavigate();
+
+  const username = login.user;
   const profilePic =
     'https://img.mbiz.web.id/180x180/erp/R2p1IXoyVEpBMk01WOEAdaI3hHVlkuIg0wW5_pn-CJCKHSrA_n1-U1tfE7Bl5H4_4Z7AxgL0DPOmUCdPuCHHC5lWvMU5Ig3t1uDrkVN53MlWlnA';
-  const link = '/';
 
   const [openedMenu, setOpenedMenu] = useState<Record<string, any>>({});
   const [activeName, setActiveName] = useState('');
@@ -227,7 +232,14 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
     );
   };
 
-  return (
+  const closeSesion = () => {
+    navigate('/');
+    logout();
+
+    console.log('llega aqui');
+  };
+
+  return login.isLogin ? (
     <nav
       role="navigation"
       className={[
@@ -262,29 +274,29 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
         <SimpleBar style={{ height: '100%' }} autoHide>
           <div className="text-slate-500">
             <div className="my-8 flex flex-col items-center h-44 overflow-x-hidden">
-              <a href={link} className={`text-center flex flex-col items-center justify-center`}>
-                <div
-                  className={`rounded-full border-4 border-white overflow-hidden duration-300 ${
-                    isExpand ? 'h-28 w-28' : isExpandOnHover ? 'h-28 w-28' : 'h-12 w-12'
-                  }`}
-                >
-                  <img src={profilePic} className="block" alt="" />
-                </div>
-                <div
-                  className={`text-base font-semibold text-slate-700 mt-3 truncate duration-300 ${
-                    isExpand ? '' : isExpandOnHover ? '' : 'w-0 h-0 opacity-0'
-                  }`}
-                >
-                  {username}
-                </div>
-                <div
-                  className={`duration-300 text-sm text-slate-500 truncate ${
-                    isExpand ? '' : isExpandOnHover ? '' : 'w-0 h-0 opacity-0'
-                  }`}
-                >
-                  {company}
-                </div>
-              </a>
+              <div
+                className={`rounded-full border-4 border-white overflow-hidden duration-300 ${
+                  isExpand ? 'h-28 w-28' : isExpandOnHover ? 'h-28 w-28' : 'h-12 w-12'
+                }`}
+              >
+                <img src={profilePic} className="block" alt="" />
+              </div>
+              <div
+                className={`text-base font-semibold text-slate-700 mt-3 truncate duration-300 ${
+                  isExpand ? '' : isExpandOnHover ? '' : 'w-0 h-0 opacity-0'
+                }`}
+              >
+                <p className="capitalize">Hola {username}</p>
+              </div>
+              <div
+                className={`duration-300 text-sm text-slate-500 truncate ${
+                  isExpand ? '' : isExpandOnHover ? '' : 'w-0 h-0 opacity-0'
+                }`}
+              >
+                <a onClick={closeSesion} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                  Cerrar Sesion
+                </a>
+              </div>
             </div>
 
             <div className="mt-3 mb-10 p-0">
@@ -296,7 +308,7 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
         </SimpleBar>
       </div>
     </nav>
-  );
+  ) : null;
 };
 
 export default Navbar;

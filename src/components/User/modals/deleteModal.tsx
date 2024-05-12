@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from '../../../storybook/components/Button/Button';
 import DeleteIcon from '../../../storybook/icons/delete';
 import { DeleteUser } from '../services/users.service';
-import { ModalDeleteUserProps } from './interface';
+import { ModalDeleteUserProps } from '../models';
 
 const DeleteModalUser = ({ closeEvent, id }: ModalDeleteUserProps) => {
   const queryClient = useQueryClient();

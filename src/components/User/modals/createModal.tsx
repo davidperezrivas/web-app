@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Input from '../../../storybook/components/Input/Input';
-import { Inputs, ModalUserProps } from './interface';
+import { Inputs, ModalUserProps } from '../models';
 import Button from '../../../storybook/components/Button/Button';
 import SaveIcon from '../../../storybook/icons/save';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -165,7 +165,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
                 tittle="Rut"
                 name="rut"
                 placeholders="Ej: 9999999-9"
-                style={error.hasOwnProperty('rut') ? 'error' : 'info'}
+                appearance={error.hasOwnProperty('rut') ? 'error' : 'info'}
                 error={error}
                 register={register}
               />
@@ -176,7 +176,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
                 tittle="Nombre"
                 name="name"
                 placeholders="Ej: Juanito Espinoza"
-                style={error.hasOwnProperty('name') ? 'error' : 'info'}
+                appearance={error.hasOwnProperty('name') ? 'error' : 'info'}
                 error={error}
                 register={register}
               />
@@ -187,7 +187,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
                 tittle="Email"
                 name="email"
                 placeholders="correo@correo.cl"
-                style={error.hasOwnProperty('email') ? 'error' : 'info'}
+                appearance={error.hasOwnProperty('email') ? 'error' : 'info'}
                 error={error}
                 register={register}
               />
@@ -199,7 +199,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
                 tittle="Contraseña"
                 name="password"
                 placeholders="Min 6 Caracteres"
-                style={error.hasOwnProperty('password') ? 'error' : 'info'}
+                appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
                 error={error}
                 register={register}
               />
@@ -211,7 +211,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
                 tittle="Confirmar contraseña"
                 name="confirmPassword"
                 placeholders=""
-                style={error.hasOwnProperty('password') ? 'error' : 'info'}
+                appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
                 error={error}
                 register={register}
               />

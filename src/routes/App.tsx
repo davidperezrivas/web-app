@@ -4,6 +4,7 @@ import Users from '../components/User/Users';
 import { Route, Routes } from 'react-router-dom';
 import Login from '../components/Login/Login';
 import { useAppSelector } from '../hooks/store';
+import { ProtectedRoute } from '../middleware/ProtectedRoutes';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -12,6 +13,7 @@ function App() {
   const bgColor = useMemo(() => {
     return login.isLogin ? 'bg-slate-100' : '';
   }, [login.isLogin]);
+
   return (
     <div className="relative min-h-screen md:flex">
       {/* sidemenu */}
@@ -23,8 +25,11 @@ function App() {
         }`}
       >
         <Routes>
-          <Route path="/" element={<Login />}></Route>
-          <Route path="/users" element={<Users />}></Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Login />}></Route>
+            <Route path="/users" element={<Users />}></Route>
+            <Route path="*" element={<Login />} />
+          </Route>
         </Routes>
       </div>
     </div>

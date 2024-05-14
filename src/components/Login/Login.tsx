@@ -16,7 +16,7 @@ const Login = () => {
   const [showToast, setShowToast] = useState(false);
   const [showError, setShowError] = useState('Ha ocurrido un error, comuniquese con el administrador.');
 
-  const { loginUser } = useUserActions();
+  const { loginUser, logout } = useUserActions();
 
   const { register, handleSubmit } = useForm<LoginModel>({
     defaultValues: {
@@ -25,15 +25,18 @@ const Login = () => {
     },
   });
 
+  logout();
+
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess(data) {
       const login = {
-        jwt: data.jwt,
+        jwt: data.token,
         isLogin: true,
         menu: data.menu,
         user: data.user,
       };
+
       loginUser(login);
       navigate('/users');
     },

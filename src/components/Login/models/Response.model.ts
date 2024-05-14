@@ -14,7 +14,7 @@ interface Module {
 interface UserMenu extends Array<Module> {}
 
 export interface ResponseLogin {
-  jwt: string;
+  token: string;
   menu: UserMenu;
   user: string;
 }

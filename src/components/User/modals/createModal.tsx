@@ -125,7 +125,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
   };
 
   const isChecked = watch('changePassword');
-  console.log('changePassword', isChecked);
+
   return (
     <div
       id="crud-modal"

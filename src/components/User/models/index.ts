@@ -11,6 +11,7 @@ export type Inputs = {
   email: string;
   password: string;
   confirmPassword: string;
+  changePassword: boolean;
 };
 
 export interface ModalDeleteUserProps {

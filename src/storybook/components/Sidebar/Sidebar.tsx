@@ -66,7 +66,6 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
 
   const generateIcon = (icon: string) => {
     var icons_map: Record<string, JSX.Element> = {};
-    console.log('icon', icon);
     icons_map['administration'] = (
       <svg
         xmlns="http://www.w3.org/2000/svg"

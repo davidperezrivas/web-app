@@ -1,3 +1,5 @@
+import host from '../../../../configuration/host';
+
 export const loginUrlApi = {
-  login: `http://localhost:3001/v1/login`,
+  login: `${host}/v1/login`,
 };

@@ -1,11 +1,11 @@
 import User from '../models/Users';
 import { CreateUserModel, UpdateUserModel } from '../models/Request.model';
 import { usersUrlApi } from './url';
+import { petitionWithToken } from '../../../services/services';
 
 export async function getAllUsers(): Promise<User[]> {
-  const response = await fetch(usersUrlApi.users);
+  const response = await petitionWithToken(usersUrlApi.users, '', 'GET');
   const data = await response.json();
-
   return data;
 }
 

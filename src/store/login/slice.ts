@@ -2,7 +2,6 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Login } from './models/login.model';
 
 const initialState: Login = {
-  jwt: '',
   isLogin: false,
   menu: [],
   user: '',
@@ -13,7 +12,11 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     createLoginUser: (state, action: PayloadAction<Login>) => {
-      return (state = action.payload);
+      state.isLogin = action.payload.isLogin;
+      state.menu = action.payload.menu;
+      state.user = action.payload.user;
+
+      return state;
     },
 
     closeSesion: (state) => {

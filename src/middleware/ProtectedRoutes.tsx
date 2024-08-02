@@ -1,16 +1,15 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../hooks/store';
 
 export const ProtectedRoute = ({ children }: any) => {
   const location = useLocation();
 
-  const login = useAppSelector((state) => state.login);
+  const jwt = localStorage.getItem('jwt');
 
-  if (location.pathname !== '/' && login.jwt === '') {
+  if (location.pathname !== '/' && jwt && jwt === '') {
     return <Navigate to={'/'} />;
   }
 
-  if (location.pathname === '/' && login.jwt !== '') {
+  if (location.pathname === '/' && jwt !== '') {
     return <Navigate to={'/users'} />;
   }
 

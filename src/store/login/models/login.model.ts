@@ -14,7 +14,6 @@ interface Module {
 interface UserMenu extends Array<Module> {}
 
 export interface Login {
-  jwt: string;
   isLogin: boolean;
   menu: UserMenu;
   user: string;

@@ -31,11 +31,13 @@ const Login = () => {
     mutationFn: login,
     onSuccess(data) {
       const login = {
-        jwt: data.token,
         isLogin: true,
         menu: data.menu,
         user: data.user,
       };
+
+      localStorage.setItem('jwt', data.jwt);
+      localStorage.setItem('refresh', data.refresh);
 
       loginUser(login);
       navigate('/users');

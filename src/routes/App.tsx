@@ -26,10 +26,11 @@ function App() {
       >
         <Routes>
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Login />}></Route>
             <Route path="/users" element={<Users />}></Route>
-            <Route path="*" element={<Login />} />
           </Route>
+
+          <Route path="/" element={<Login />}></Route>
+          <Route path="*" element={<Login />} />
         </Routes>
       </div>
     </div>

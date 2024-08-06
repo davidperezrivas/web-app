@@ -4,7 +4,7 @@ import { Inputs, ModalUserProps } from '../models';
 import Button from '../../../storybook/components/Button/Button';
 import SaveIcon from '../../../storybook/icons/save';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { UpdateUser, createUser, getUserById } from '../services/users.service';
+import { updateUser, createUser, getUserById } from '../services/users.service';
 import User from '../models/Users';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import SkeletonTable from '../../../storybook/components/Skeleton/SkeletonTable';
@@ -52,7 +52,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: UpdateUser,
+    mutationFn: updateUser,
     onSuccess: () => {
       closeEvent(false);
       queryClient.invalidateQueries({ queryKey: ['getUsers'] });

@@ -10,6 +10,7 @@ export const useUserActions = () => {
   };
 
   const logout = () => {
+    localStorage.clear();
     dispatch(closeSesion());
   };
 

@@ -10,7 +10,7 @@ import Toast from '../../storybook/components/Toast/Toast';
 import SkeletonTable from '../../storybook/components/Skeleton/SkeletonTable';
 import { useMemo, useState } from 'react';
 import { ICellRendererParams } from 'ag-grid-community';
-import CreateModalUser from './modals/createModal';
+import CreateModalUser from './modals/upsertModal';
 import EditIcon from '../../storybook/icons/edit';
 import DeleteIcon from '../../storybook/icons/delete';
 import DeleteModalUser from './modals/deleteModal';

@@ -32,7 +32,7 @@ export async function createUser(user: CreateUserModel) {
   }
 }
 
-export async function UpdateUser(user: UpdateUserModel) {
+export async function updateUser(user: UpdateUserModel) {
   const requestOptions = {
     method: 'PATCH',
     headers: {

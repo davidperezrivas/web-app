@@ -10,22 +10,15 @@ export async function getAllUsers(): Promise<User[]> {
 }
 
 export async function getUserById(id: string): Promise<User> {
-  const response = await fetch(`${usersUrlApi.users}/getById?id=${id}`);
+  const url = `${usersUrlApi.users}/getById?id=${id}`;
+  const response = await petitionWithToken(url, '', 'GET');
   const data = await response.json();
-
   return data;
 }
 
 export async function createUser(user: CreateUserModel) {
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  const response = await petitionWithToken(usersUrlApi.users, user, 'POST');
 
-    body: JSON.stringify(user),
-  };
-  const response = await fetch(usersUrlApi.users, requestOptions);
   if (response.status >= 400) {
     const data = await response.json();
     throw new Error(data.msg);
@@ -33,15 +26,8 @@ export async function createUser(user: CreateUserModel) {
 }
 
 export async function updateUser(user: UpdateUserModel) {
-  const requestOptions = {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  const response = await petitionWithToken(usersUrlApi.users, user, 'PATCH');
 
-    body: JSON.stringify(user),
-  };
-  const response = await fetch(usersUrlApi.users, requestOptions);
   if (response.status >= 400) {
     const data = await response.json();
     throw new Error(data.msg);
@@ -49,10 +35,9 @@ export async function updateUser(user: UpdateUserModel) {
 }
 
 export async function DeleteUser(id: string) {
-  const requestOptions = {
-    method: 'DELETE',
-  };
-  const response = await fetch(`${usersUrlApi.users}/?id=${id}`, requestOptions);
+  const url = `${usersUrlApi.users}/?id=${id}`;
+  const response = await petitionWithToken(url, '', 'DELETE');
+
   if (response.status >= 400) {
     const data = await response.json();
     throw new Error(data.msg);

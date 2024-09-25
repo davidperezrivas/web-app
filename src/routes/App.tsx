@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import Login from '../components/Login/Login';
 import { useAppSelector } from '../hooks/store';
 import { ProtectedRoute } from '../middleware/ProtectedRoutes';
+import Dashboard from '../components/Dashboard/Dashboard';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -15,7 +16,7 @@ function App() {
   }, [login.isLogin]);
 
   return (
-    <div className="relative min-h-screen md:flex">
+    <div className='relative min-h-screen md:flex'>
       {/* sidemenu */}
       <Sidebar setExpand={setSideMenuIsExpand} />
       {/* content */}
@@ -26,11 +27,12 @@ function App() {
       >
         <Routes>
           <Route element={<ProtectedRoute />}>
-            <Route path="/users" element={<Users />}></Route>
+            <Route path='/users' element={<Users />}></Route>
+            <Route path='/dashboard' element={<Dashboard />}></Route>
           </Route>
 
-          <Route path="/" element={<Login />}></Route>
-          <Route path="*" element={<Login />} />
+          <Route path='/' element={<Login />}></Route>
+          <Route path='*' element={<Login />} />
         </Routes>
       </div>
     </div>

@@ -1,7 +1,16 @@
 import { useMemo } from 'react';
 import { InputProps } from './interface';
 
-const Input = ({ tittle, name, appearance, icon, placeholders, error, register, type }: InputProps) => {
+const Input = ({
+  tittle,
+  name,
+  appearance,
+  icon,
+  placeholders,
+  error,
+  register,
+  type,
+}: InputProps) => {
   const classConfig = useMemo(() => {
     const config = {
       error: {
@@ -23,10 +32,12 @@ const Input = ({ tittle, name, appearance, icon, placeholders, error, register, 
 
   return (
     <>
-      <label className={`block mb-2 text-sm font-medium ${classConfig.label}`}>{tittle}</label>
+      <label className={`block mb-2 text-sm font-medium ${classConfig.label}`}>
+        {tittle}
+      </label>
       <input
-        autoComplete="false"
-        autofill="off"
+        autoComplete='false'
+        autofill='off'
         type={type}
         id={name}
         className={classConfig.input}
@@ -34,7 +45,10 @@ const Input = ({ tittle, name, appearance, icon, placeholders, error, register, 
         name={name}
         {...register(name)}
       />
-      <p id="helper-text-explanation" className={`mt-2 text-sm italic ${classConfig.explanation}`}>
+      <p
+        id='helper-text-explanation'
+        className={`mt-2 text-sm italic ${classConfig.explanation}`}
+      >
         {error?.hasOwnProperty(name) ? error[name] : placeholders}
       </p>
     </>

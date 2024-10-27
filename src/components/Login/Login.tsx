@@ -3,7 +3,7 @@ import Button from '../../storybook/components/Button/Button';
 import Input from '../../storybook/components/Input/Input';
 import LoginModel, { LoginForm } from './models/Login';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { login } from './services/login.service';
 import Toast from '../../storybook/components/Toast/Toast';
@@ -11,10 +11,13 @@ import { useUserActions } from '../../hooks/useLoginActions';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { logout } = useUserActions();
 
   const [error, setError] = useState({});
   const [showToast, setShowToast] = useState(false);
-  const [showError, setShowError] = useState('Ha ocurrido un error, comuniquese con el administrador.');
+  const [showError, setShowError] = useState(
+    'Ha ocurrido un error, comuniquese con el administrador.',
+  );
 
   const { loginUser } = useUserActions();
 
@@ -81,17 +84,29 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    logout();
+  }, []);
+
   return (
-    <div id="crud-modal" aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center ">
-      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full">
-        <form className="p-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-6 mb-6 md:grid-cols-1">
+    <div
+      id='crud-modal'
+      aria-hidden='true'
+      className='fixed inset-0 z-50 flex items-center justify-center '
+    >
+      <div className='bg-white rounded-lg shadow-lg max-w-2xl w-full'>
+        <form
+          className='p-4'
+          autoComplete='off'
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className='grid gap-6 mb-6 md:grid-cols-1'>
             <div>
               <Input
-                type="text"
-                tittle="Email"
-                name="email"
-                placeholders="correo@correo.cl"
+                type='text'
+                tittle='Email'
+                name='email'
+                placeholders='correo@correo.cl'
                 appearance={error.hasOwnProperty('email') ? 'error' : 'info'}
                 register={register}
                 error={error}
@@ -99,25 +114,28 @@ const Login = () => {
             </div>
             <div>
               <Input
-                type="password"
-                tittle="Clave"
-                name="password"
-                placeholders="Escriba su contraseña"
+                type='password'
+                tittle='Clave'
+                name='password'
+                placeholders='Escriba su contraseña'
                 appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
                 register={register}
                 error={error}
               />
             </div>
-            <div className="flex justify-end">
+            <div className='flex justify-end'>
               <div>
-                <Link to="" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                <Link
+                  to=''
+                  className='font-medium text-primary-600 hover:underline dark:text-primary-500'
+                >
                   ¿Has olvidado tu contraseña?
                 </Link>
               </div>
             </div>
           </div>
 
-          <section className="flex justify-end pb-4">
+          <section className='flex justify-end pb-4'>
             <div>
               {showToast ? <Toast text={showError} type={'error'} /> : null}
               <Button text={'Iniciar Sesion'} status={'info'} type={'submit'} />

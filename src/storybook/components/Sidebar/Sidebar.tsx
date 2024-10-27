@@ -226,6 +226,8 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
     logout();
   };
 
+  console.log(localStorage);
+  console.log(login);
   return login.isLogin ? (
     <nav
       role='navigation'

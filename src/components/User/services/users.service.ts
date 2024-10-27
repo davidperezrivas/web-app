@@ -2,6 +2,7 @@ import User from '../models/Users';
 import { CreateUserModel, UpdateUserModel } from '../models/Request.model';
 import { usersUrlApi } from './url';
 import { petitionWithToken } from '../../../services/services';
+import Role from '../models/Role';
 
 export async function getAllUsers(): Promise<User[]> {
   const response = await petitionWithToken(usersUrlApi.users, '', 'GET');
@@ -11,6 +12,13 @@ export async function getAllUsers(): Promise<User[]> {
 
 export async function getUserById(id: string): Promise<User> {
   const url = `${usersUrlApi.users}/getById?id=${id}`;
+  const response = await petitionWithToken(url, '', 'GET');
+  const data = await response.json();
+  return data;
+}
+
+export async function getRoles(): Promise<Role[]> {
+  const url = `${usersUrlApi.users}/getRoles`;
   const response = await petitionWithToken(url, '', 'GET');
   const data = await response.json();
   return data;

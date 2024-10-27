@@ -1,15 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Input from '../../../storybook/components/Input/Input';
 import { Inputs, ModalUserProps } from '../models';
 import Button from '../../../storybook/components/Button/Button';
 import SaveIcon from '../../../storybook/icons/save';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { updateUser, createUser, getUserById } from '../services/users.service';
+import {
+  updateUser,
+  createUser,
+  getUserById,
+  getRoles,
+} from '../services/users.service';
 import User from '../models/Users';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import SkeletonTable from '../../../storybook/components/Skeleton/SkeletonTable';
+import Dropdown from '../../../storybook/components/Dropdown/Dropdown';
+import Role from '../models/Role';
 
-const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalUserProps) => {
+const CreateModalUser = ({
+  closeEvent,
+  errorEvent,
+  setErrorMessage,
+  id,
+}: ModalUserProps) => {
   const [error, setError] = useState({});
   const queryClient = useQueryClient();
 
@@ -19,12 +31,19 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
     refetchOnWindowFocus: false,
   });
 
-  const { register, handleSubmit, reset, watch } = useForm<Inputs>({
+  const { data: roleList } = useQuery<Role[]>({
+    queryKey: ['userRole'],
+    queryFn: async () => getRoles(),
+    refetchOnWindowFocus: false,
+  });
+
+  const { register, handleSubmit, reset, watch, control } = useForm<Inputs>({
     defaultValues: {
       name: id ? data?.name : '',
       rut: id ? data?.rut : '',
       email: id ? data?.email : '',
       password: id ? data?.password : '',
+      role: id ? data?.role?.id : roleList?.[0]?.id,
       confirmPassword: id ? data?.password : '',
       changePassword: false,
     },
@@ -39,9 +58,21 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
         password: data?.password ?? '',
         confirmPassword: data?.password ?? '',
         changePassword: false,
+        role: data?.role?.id ?? roleList?.[0]?.id,
       });
     }
-  }, [data, reset]);
+  }, [data, roleList, reset]);
+
+  const roleElemets = useMemo(() => {
+    return (
+      roleList?.map((rol) => {
+        return {
+          label: rol.name,
+          value: rol.id,
+        };
+      }) ?? []
+    );
+  }, [roleList]);
 
   const addUserMutation = useMutation({
     mutationFn: createUser,
@@ -61,7 +92,10 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
 
   useEffect(() => {
     errorEvent(addUserMutation.isError);
-    setErrorMessage(addUserMutation.error?.toString() ?? 'Ha ocurrido un error, comuniquese con el administrador.');
+    setErrorMessage(
+      addUserMutation.error?.toString() ??
+        'Ha ocurrido un error, comuniquese con el administrador.',
+    );
   }, [addUserMutation, setErrorMessage, errorEvent]);
 
   const formValidations = (formData: any): boolean => {
@@ -98,7 +132,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
   };
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const { name, rut, email, password, changePassword } = data;
+    const { name, rut, email, password, changePassword, role } = data;
 
     const isValid = formValidations(data);
 
@@ -108,6 +142,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
         rut,
         email,
         password,
+        role,
       };
 
       const updateUser = {
@@ -128,50 +163,56 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
 
   return (
     <div
-      id="crud-modal"
-      aria-hidden="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      id='crud-modal'
+      aria-hidden='true'
+      className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'
     >
-      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full">
-        <div className="flex items-center justify-between p-4 border-b">
-          <h3 className="text-lg font-semibold text-gray-900">{id ? 'Actualizar Registro' : 'Crear usuario'}</h3>
+      <div className='bg-white rounded-lg shadow-lg max-w-2xl w-full'>
+        <div className='flex items-center justify-between p-4 border-b'>
+          <h3 className='text-lg font-semibold text-gray-900'>
+            {id ? 'Actualizar Registro' : 'Crear usuario'}
+          </h3>
           <button
-            type="button"
-            className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex justify-center items-center"
-            data-modal-toggle="crud-modal"
+            type='button'
+            className='text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex justify-center items-center'
+            data-modal-toggle='crud-modal'
             onClick={() => {
               closeEvent(false);
             }}
           >
             <svg
-              className="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
+              className='w-3 h-3'
+              aria-hidden='true'
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 14 14'
             >
               <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                stroke='currentColor'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
               />
             </svg>
-            <span className="sr-only">Close modal</span>
+            <span className='sr-only'>Close modal</span>
           </button>
         </div>
         {isLoading ? (
           <SkeletonTable />
         ) : (
-          <form className="p-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-6 mb-6 md:grid-cols-3">
+          <form
+            className='p-4'
+            autoComplete='off'
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className='grid gap-6 mb-6 md:grid-cols-3'>
               <div>
                 <Input
-                  type="text"
-                  tittle="Rut"
-                  name="rut"
-                  placeholders="Ej: 9999999-9"
+                  type='text'
+                  tittle='Rut'
+                  name='rut'
+                  placeholders='Ej: 9999999-9'
                   appearance={error.hasOwnProperty('rut') ? 'error' : 'info'}
                   error={error}
                   register={register}
@@ -179,10 +220,10 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
               </div>
               <div>
                 <Input
-                  type="text"
-                  tittle="Nombre"
-                  name="name"
-                  placeholders="Ej: Juanito Espinoza"
+                  type='text'
+                  tittle='Nombre'
+                  name='name'
+                  placeholders='Ej: Juanito Espinoza'
                   appearance={error.hasOwnProperty('name') ? 'error' : 'info'}
                   error={error}
                   register={register}
@@ -190,44 +231,59 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
               </div>
               <div>
                 <Input
-                  type="text"
-                  tittle="Email"
-                  name="email"
-                  placeholders="correo@correo.cl"
+                  type='text'
+                  tittle='Email'
+                  name='email'
+                  placeholders='correo@correo.cl'
                   appearance={error.hasOwnProperty('email') ? 'error' : 'info'}
                   error={error}
                   register={register}
                 />
               </div>
+              <div>
+                <Dropdown
+                  control={control}
+                  fields={roleElemets}
+                  tittle={'Rol'}
+                />
+              </div>
               {id ? (
-                <div className="flex items-center">
-                  <input type="checkbox" id="changePassword" {...register('changePassword')} />
-                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                <div className='flex items-center'>
+                  <input
+                    type='checkbox'
+                    id='changePassword'
+                    {...register('changePassword')}
+                  />
+                  <label className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
                     Actualizar Contraseña
                   </label>
                 </div>
               ) : null}
               {isChecked || !id ? (
                 <>
-                  <div className="mb-6">
+                  <div className='mb-6'>
                     <Input
-                      type="password"
-                      tittle="Contraseña"
-                      name="password"
-                      placeholders="Min 6 Caracteres"
-                      appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
+                      type='password'
+                      tittle='Contraseña'
+                      name='password'
+                      placeholders='Min 6 Caracteres'
+                      appearance={
+                        error.hasOwnProperty('password') ? 'error' : 'info'
+                      }
                       error={error}
                       register={register}
                     />
                   </div>
 
-                  <div className="mb-6">
+                  <div className='mb-6'>
                     <Input
-                      type="password"
-                      tittle="Confirmar contraseña"
-                      name="confirmPassword"
-                      placeholders=""
-                      appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
+                      type='password'
+                      tittle='Confirmar contraseña'
+                      name='confirmPassword'
+                      placeholders=''
+                      appearance={
+                        error.hasOwnProperty('password') ? 'error' : 'info'
+                      }
                       error={error}
                       register={register}
                     />
@@ -236,9 +292,14 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
               ) : null}
             </div>
 
-            <section className="flex justify-end pb-4">
+            <section className='flex justify-end pb-4'>
               <div>
-                <Button text={'Guardar'} status={'info'} icon={<SaveIcon />} type={'submit'} />
+                <Button
+                  text={'Guardar'}
+                  status={'info'}
+                  icon={<SaveIcon />}
+                  type={'submit'}
+                />
               </div>
             </section>
           </form>

@@ -10,6 +10,7 @@ export type Inputs = {
   rut: string;
   email: string;
   password: string;
+  role: string;
   confirmPassword: string;
   changePassword: boolean;
 };

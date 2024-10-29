@@ -14,6 +14,7 @@ import CreateModalUser from './modals/upsertModal';
 import EditIcon from '../../storybook/icons/edit';
 import DeleteIcon from '../../storybook/icons/delete';
 import DeleteModalUser from './modals/deleteModal';
+import PermissionIcon from '../../storybook/icons/permission';
 
 const Users = () => {
   const { isLoading, isError, data } = useQuery<User[]>({
@@ -71,10 +72,19 @@ const Users = () => {
                   setSelectedUser(props.data.id.toString());
                 }}
               />
+              <Button
+                text={''}
+                status={'info'}
+                icon={<PermissionIcon />}
+                onClick={() => {
+                  setShowModalDelete(true);
+                  setSelectedUser(props.data.id.toString());
+                }}
+              />
             </div>
           );
         },
-        minWidth: 200,
+        minWidth: 300,
       },
     ];
   }, []);

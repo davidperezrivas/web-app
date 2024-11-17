@@ -6,8 +6,7 @@ export const ProtectedRoute = ({ children }: any) => {
   const location = useLocation();
 
   const jwt = localStorage.getItem('jwt');
-
-  if (location.pathname !== '/' && jwt && jwt === '') {
+  if (location.pathname !== '/' && (!jwt || jwt === '')) {
     logout();
     return <Navigate to={'/'} />;
   }

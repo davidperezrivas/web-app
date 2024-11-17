@@ -19,8 +19,7 @@ const Button = ({ text, status, icon, onClick, type = 'button' }: ButtonProps) =
 
   return (
     <button type={type} className={classButton} onClick={onClick}>
-      {icon}
-      {text !== '' ? <span className="px-1">{text}</span> : null}
+      {icon} {text !== '' ? <span className="px-1">{text}</span> : null}
     </button>
   );
 };

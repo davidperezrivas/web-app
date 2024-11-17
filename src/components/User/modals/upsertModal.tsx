@@ -4,51 +4,38 @@ import { Inputs, ModalUserProps } from '../models';
 import Button from '../../../storybook/components/Button/Button';
 import SaveIcon from '../../../storybook/icons/save';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  updateUser,
-  createUser,
-  getUserById,
-  getRoles,
-} from '../services/users.service';
+import { updateUser, createUser, getUserById, getRoles } from '../services/users.service';
 import User from '../models/Users';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import SkeletonTable from '../../../storybook/components/Skeleton/SkeletonTable';
-import Dropdown from '../../../storybook/components/Dropdown/Dropdown';
-import Role from '../models/Role';
 
-const CreateModalUser = ({
-  closeEvent,
-  errorEvent,
-  setErrorMessage,
-  id,
-}: ModalUserProps) => {
+// Componente CreateModalUser: Modal para crear o actualizar un usuario
+const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalUserProps) => {
+  // Estado local para gestionar errores
   const [error, setError] = useState({});
+  // Cliente de consultas para la gestión de cache
   const queryClient = useQueryClient();
 
+  // Hook useQuery para obtener los datos del usuario por id
   const { data, isLoading } = useQuery<User>({
     queryKey: ['userById'],
     queryFn: async () => getUserById(id ?? ''),
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false, // Evita recargar datos al reenfocar la ventana
   });
 
-  const { data: roleList } = useQuery<Role[]>({
-    queryKey: ['userRole'],
-    queryFn: async () => getRoles(),
-    refetchOnWindowFocus: false,
-  });
-
+  // Configuración de React Hook Form con valores predeterminados
   const { register, handleSubmit, reset, watch, control } = useForm<Inputs>({
     defaultValues: {
       name: id ? data?.name : '',
       rut: id ? data?.rut : '',
       email: id ? data?.email : '',
       password: id ? data?.password : '',
-      role: id ? data?.role?.id : roleList?.[0]?.id,
       confirmPassword: id ? data?.password : '',
       changePassword: false,
     },
   });
 
+  // Actualiza el formulario con los datos del usuario cuando los datos están disponibles
   useEffect(() => {
     if (data) {
       reset({
@@ -58,22 +45,11 @@ const CreateModalUser = ({
         password: data?.password ?? '',
         confirmPassword: data?.password ?? '',
         changePassword: false,
-        role: data?.role?.id ?? roleList?.[0]?.id,
       });
     }
-  }, [data, roleList, reset]);
+  }, [data, reset]);
 
-  const roleElemets = useMemo(() => {
-    return (
-      roleList?.map((rol) => {
-        return {
-          label: rol.name,
-          value: rol.id,
-        };
-      }) ?? []
-    );
-  }, [roleList]);
-
+  // Configuración de la mutación para agregar un usuario
   const addUserMutation = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
@@ -82,6 +58,7 @@ const CreateModalUser = ({
     },
   });
 
+  // Configuración de la mutación para actualizar un usuario
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
     onSuccess: () => {
@@ -90,14 +67,17 @@ const CreateModalUser = ({
     },
   });
 
+  // Escucha los errores en la mutación de agregar usuario
   useEffect(() => {
     errorEvent(addUserMutation.isError);
-    setErrorMessage(
-      addUserMutation.error?.toString() ??
-        'Ha ocurrido un error, comuniquese con el administrador.',
-    );
+    setErrorMessage(addUserMutation.error?.toString() ?? 'Ha ocurrido un error, comuniquese con el administrador.');
   }, [addUserMutation, setErrorMessage, errorEvent]);
 
+  /**
+   * Validaciones del formulario para verificar los campos antes de enviar
+   * @param formData - Los datos del formulario
+   * @returns booleano - true si la validación es exitosa, false si falla
+   */
   const formValidations = (formData: any): boolean => {
     setError({});
     let error = {};
@@ -131,6 +111,10 @@ const CreateModalUser = ({
     return Object.keys(error).length === 0;
   };
 
+  /**
+   * Envía los datos del formulario dependiendo si es una creación o actualización
+   * @param data - Datos del formulario a enviar
+   */
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const { name, rut, email, password, changePassword, role } = data;
 
@@ -151,6 +135,7 @@ const CreateModalUser = ({
         changePassword,
       };
 
+      // Condición para saber si es actualización o creación
       if (!!id) {
         updateUserMutation.mutate(updateUser);
       } else {
@@ -159,60 +144,58 @@ const CreateModalUser = ({
     }
   };
 
+  // Estado para verificar si la opción de cambiar contraseña está seleccionada
   const isChecked = watch('changePassword');
 
   return (
     <div
-      id='crud-modal'
-      aria-hidden='true'
-      className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'
+      id="crud-modal"
+      aria-hidden="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
     >
-      <div className='bg-white rounded-lg shadow-lg max-w-2xl w-full'>
-        <div className='flex items-center justify-between p-4 border-b'>
-          <h3 className='text-lg font-semibold text-gray-900'>
-            {id ? 'Actualizar Registro' : 'Crear usuario'}
-          </h3>
+      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h3 className="text-lg font-semibold text-gray-900">{id ? 'Actualizar Registro' : 'Crear usuario'}</h3>
           <button
-            type='button'
-            className='text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex justify-center items-center'
-            data-modal-toggle='crud-modal'
+            type="button"
+            className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex justify-center items-center"
+            data-modal-toggle="crud-modal"
             onClick={() => {
               closeEvent(false);
             }}
           >
+            {/* Icono SVG para el botón de cerrar */}
             <svg
-              className='w-3 h-3'
-              aria-hidden='true'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 14 14'
+              className="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
             >
               <path
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
               />
             </svg>
-            <span className='sr-only'>Close modal</span>
+            <span className="sr-only">Close modal</span>
           </button>
         </div>
+        {/* Renderizado condicional para mostrar carga o formulario */}
         {isLoading ? (
           <SkeletonTable />
         ) : (
-          <form
-            className='p-4'
-            autoComplete='off'
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className='grid gap-6 mb-6 md:grid-cols-3'>
+          <form className="p-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid gap-6 mb-6 md:grid-cols-3">
+              {/* Campos de entrada */}
               <div>
                 <Input
-                  type='text'
-                  tittle='Rut'
-                  name='rut'
-                  placeholders='Ej: 9999999-9'
+                  type="text"
+                  tittle="Rut"
+                  name="rut"
+                  placeholders="Ej: 9999999-9"
                   appearance={error.hasOwnProperty('rut') ? 'error' : 'info'}
                   error={error}
                   register={register}
@@ -220,10 +203,10 @@ const CreateModalUser = ({
               </div>
               <div>
                 <Input
-                  type='text'
-                  tittle='Nombre'
-                  name='name'
-                  placeholders='Ej: Juanito Espinoza'
+                  type="text"
+                  tittle="Nombre"
+                  name="name"
+                  placeholders="Ej: Juanito Espinoza"
                   appearance={error.hasOwnProperty('name') ? 'error' : 'info'}
                   error={error}
                   register={register}
@@ -231,59 +214,47 @@ const CreateModalUser = ({
               </div>
               <div>
                 <Input
-                  type='text'
-                  tittle='Email'
-                  name='email'
-                  placeholders='correo@correo.cl'
+                  type="text"
+                  tittle="Email"
+                  name="email"
+                  placeholders="correo@correo.cl"
                   appearance={error.hasOwnProperty('email') ? 'error' : 'info'}
                   error={error}
                   register={register}
                 />
               </div>
-              <div>
-                <Dropdown
-                  control={control}
-                  fields={roleElemets}
-                  tittle={'Rol'}
-                />
-              </div>
+
+              {/* Checkbox para actualizar contraseña */}
               {id ? (
-                <div className='flex items-center'>
-                  <input
-                    type='checkbox'
-                    id='changePassword'
-                    {...register('changePassword')}
-                  />
-                  <label className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                <div className="flex items-center">
+                  <input type="checkbox" id="changePassword" {...register('changePassword')} />
+                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                     Actualizar Contraseña
                   </label>
                 </div>
               ) : null}
+              {/* Campos de contraseña si es nuevo usuario o si la opción está activada */}
               {isChecked || !id ? (
                 <>
-                  <div className='mb-6'>
+                  <div className="mb-6">
                     <Input
-                      type='password'
-                      tittle='Contraseña'
-                      name='password'
-                      placeholders='Min 6 Caracteres'
-                      appearance={
-                        error.hasOwnProperty('password') ? 'error' : 'info'
-                      }
+                      type="password"
+                      tittle="Contraseña"
+                      name="password"
+                      placeholders="Min 6 Caracteres"
+                      appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
                       error={error}
                       register={register}
                     />
                   </div>
 
-                  <div className='mb-6'>
+                  <div className="mb-6">
                     <Input
-                      type='password'
-                      tittle='Confirmar contraseña'
-                      name='confirmPassword'
-                      placeholders=''
-                      appearance={
-                        error.hasOwnProperty('password') ? 'error' : 'info'
-                      }
+                      type="password"
+                      tittle="Confirmar contraseña"
+                      name="confirmPassword"
+                      placeholders=""
+                      appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
                       error={error}
                       register={register}
                     />
@@ -292,14 +263,10 @@ const CreateModalUser = ({
               ) : null}
             </div>
 
-            <section className='flex justify-end pb-4'>
+            {/* Botón de guardar */}
+            <section className="flex justify-end pb-4">
               <div>
-                <Button
-                  text={'Guardar'}
-                  status={'info'}
-                  icon={<SaveIcon />}
-                  type={'submit'}
-                />
+                <Button text="Guardar" type="submit" icon={SaveIcon} status={'info'} />
               </div>
             </section>
           </form>

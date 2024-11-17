@@ -15,9 +15,7 @@ const Login = () => {
 
   const [error, setError] = useState({});
   const [showToast, setShowToast] = useState(false);
-  const [showError, setShowError] = useState(
-    'Ha ocurrido un error, comuniquese con el administrador.',
-  );
+  const [showError, setShowError] = useState('Ha ocurrido un error, comuniquese con el administrador.');
 
   const { loginUser } = useUserActions();
 
@@ -89,24 +87,16 @@ const Login = () => {
   }, []);
 
   return (
-    <div
-      id='crud-modal'
-      aria-hidden='true'
-      className='fixed inset-0 z-50 flex items-center justify-center '
-    >
-      <div className='bg-white rounded-lg shadow-lg max-w-2xl w-full'>
-        <form
-          className='p-4'
-          autoComplete='off'
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className='grid gap-6 mb-6 md:grid-cols-1'>
+    <div id="crud-modal" aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center ">
+      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full">
+        <form className="p-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid gap-6 mb-6 md:grid-cols-1">
             <div>
               <Input
-                type='text'
-                tittle='Email'
-                name='email'
-                placeholders='correo@correo.cl'
+                type="text"
+                tittle="Email"
+                name="email"
+                placeholders="correo@correo.cl"
                 appearance={error.hasOwnProperty('email') ? 'error' : 'info'}
                 register={register}
                 error={error}
@@ -114,20 +104,20 @@ const Login = () => {
             </div>
             <div>
               <Input
-                type='password'
-                tittle='Clave'
-                name='password'
-                placeholders='Escriba su contraseña'
+                type="password"
+                tittle="Clave"
+                name="password"
+                placeholders="Escriba su contraseña"
                 appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
                 register={register}
                 error={error}
               />
             </div>
-            <div className='flex justify-end'>
+            <div className="flex justify-end">
               <div>
                 <Link
-                  to=''
-                  className='font-medium text-primary-600 hover:underline dark:text-primary-500'
+                  to="/recoverPassword"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   ¿Has olvidado tu contraseña?
                 </Link>
@@ -135,7 +125,7 @@ const Login = () => {
             </div>
           </div>
 
-          <section className='flex justify-end pb-4'>
+          <section className="flex justify-end pb-4">
             <div>
               {showToast ? <Toast text={showError} type={'error'} /> : null}
               <Button text={'Iniciar Sesion'} status={'info'} type={'submit'} />

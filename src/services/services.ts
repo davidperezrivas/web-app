@@ -1,3 +1,5 @@
+import host from '../configuration/host';
+
 enum methodEnum {
   GET = 'GET',
   POST = 'POST',
@@ -19,20 +21,23 @@ type methodType = keyof typeof methodEnum;
  */
 const fetchURL = async (path: string, method: methodType, data?: object, headers?: any, params?: any) => {
   // build patch with paramets
+
   let pathURL = path;
   if (params && Object.keys(params).length) {
     pathURL = `${pathURL}?${new URLSearchParams(params).toString()}`;
   }
 
-  const resp = await fetch(pathURL, {
+  const options = {
     method,
     headers: {
       Accept: 'application/json',
       'Content-type': 'application/json',
       ...((headers && headers) || {}),
     },
-    ...((method !== 'GET' && { body: JSON.stringify(data) }) || {}),
-  });
+    ...((method !== 'GET' && method !== 'DELETE' && { body: JSON.stringify(data) }) || {}),
+  };
+
+  const resp = await fetch(pathURL, options);
 
   return resp;
 };
@@ -54,10 +59,11 @@ export const petitionWithToken = async (
 ) => {
   const token = localStorage.getItem('jwt');
 
+  console.log('token', token);
   const response = await fetchURL(path, method, data, { Authorization: `Bearer ${token}` }, params);
-
+  console.log('respponse 2', response);
   if (response.status === 401) {
-    const url = 'http://localhost:3002/v1/refresh';
+    const url = `${host}/v1/refresh`;
 
     const method = 'GET';
     const refresh = localStorage.getItem('refresh');
@@ -81,6 +87,7 @@ export const petitionWithToken = async (
 
     const values = await responseRefresh.json();
     const newToken = values.token;
+
     localStorage.setItem('jwt', newToken);
     const newRequest = await fetchURL(path, method, data, { Authorization: `Bearer ${newToken}` }, params);
 

@@ -6,6 +6,9 @@ import Login from '../components/Login/Login';
 import { useAppSelector } from '../hooks/store';
 import { ProtectedRoute } from '../middleware/ProtectedRoutes';
 import Dashboard from '../components/Dashboard/Dashboard';
+import RecoverPassword from '../components/RecoverPassword/RecoverPassword';
+import FormRecoverPassword from '../components/RecoverPassword/RecoverPasswordForm';
+import Subscriptions from '../components/Subscription/Subscriptions';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -16,7 +19,7 @@ function App() {
   }, [login.isLogin]);
 
   return (
-    <div className='relative min-h-screen md:flex'>
+    <div className="relative min-h-screen md:flex">
       {/* sidemenu */}
       <Sidebar setExpand={setSideMenuIsExpand} />
       {/* content */}
@@ -27,12 +30,15 @@ function App() {
       >
         <Routes>
           <Route element={<ProtectedRoute />}>
-            <Route path='/users' element={<Users />}></Route>
-            <Route path='/dashboard' element={<Dashboard />}></Route>
+            <Route path="/users" element={<Users />}></Route>
+            <Route path="/dashboard" element={<Dashboard />}></Route>
+            <Route path="/subscriptions" element={<Subscriptions />}></Route>
           </Route>
 
-          <Route path='/' element={<Login />}></Route>
-          <Route path='*' element={<Login />} />
+          <Route path="/recoverPassword" element={<RecoverPassword />} />
+          <Route path="/recoverPasswordForm/:token" element={<FormRecoverPassword />} />
+          <Route path="/" element={<Login />}></Route>
+          <Route path="*" element={<Login />} />
         </Routes>
       </div>
     </div>

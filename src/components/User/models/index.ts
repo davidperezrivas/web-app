@@ -13,6 +13,9 @@ export type Inputs = {
   role: string;
   confirmPassword: string;
   changePassword: boolean;
+  subscription: string;
+  phone_number: string;
+  date_of_birth: string;
 };
 
 export interface ModalDeleteUserProps {

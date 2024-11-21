@@ -1,12 +1,15 @@
-export interface InputProps {
-  /* Nombre / id del boton */
-  tittle: string;
+export interface DropdownProps {
+  /* Campos a desplegar */
+  fields: any[] | undefined;
 
-  /* Nombre / id del boton */
+  /* Nombre del componente  */
   name: string;
 
-  /* Texto que aparece en el input */
-  placeholders: string;
+  /* Titulo del dropdpwn*/
+  tittle: string;
+
+  /* Controlador del formulario */
+  control: any;
 
   /*
    * Apariencia del  boton
@@ -17,26 +20,8 @@ export interface InputProps {
   appearance: 'error' | 'info';
 
   /*
-   *  Icono que se desea mostrar
-   *
-   */
-  icon?: any;
-
-  /*
    *  Mensaje de error
    *
    */
   error?: any;
-
-  /*
-   *  Valor del input
-   *
-   */
-  register: any;
-
-  /*
-   *  tipo de input
-   *
-   */
-  type: string;
 }

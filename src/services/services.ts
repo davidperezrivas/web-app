@@ -59,9 +59,7 @@ export const petitionWithToken = async (
 ) => {
   const token = localStorage.getItem('jwt');
 
-  console.log('token', token);
   const response = await fetchURL(path, method, data, { Authorization: `Bearer ${token}` }, params);
-  console.log('respponse 2', response);
   if (response.status === 401) {
     const url = `${host}/v1/refresh`;
 

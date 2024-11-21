@@ -38,6 +38,9 @@ const Users = () => {
         email: user.email,
         rut: user.rut,
         id: user.id,
+        subscription: user.subscription,
+        phone_number: user.phone_number,
+        date_of_birth: user.date_of_birth,
       };
     });
   }, [data]);
@@ -45,9 +48,16 @@ const Users = () => {
   // Configuración de las columnas de la tabla
   const colDefs = useMemo(() => {
     return [
-      { field: 'rut', headerName: 'Rut', minWidth: 300 },
-      { field: 'name', headerName: 'Nombre', minWidth: 350 },
-      { field: 'email', headerName: 'Email', minWidth: 350 },
+      { field: 'rut', headerName: 'Rut', minWidth: 150 },
+      { field: 'name', headerName: 'Nombre', minWidth: 150 },
+      { field: 'email', headerName: 'Email', minWidth: 150 },
+      { field: 'subscription.name', headerName: 'Subscripción', minWidth: 150 },
+      { field: 'phone_number', headerName: 'Número Telefono', minWidth: 150 },
+      {
+        field: 'date_of_birth',
+        headerName: 'Fecha Nacimiento',
+        minWidth: 150,
+      },
 
       {
         headerName: '',

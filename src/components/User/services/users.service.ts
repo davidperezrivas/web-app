@@ -2,7 +2,6 @@ import User from '../models/Users';
 import { CreateUserModel, UpdateUserModel } from '../models/Request.model';
 import { usersUrlApi } from './url';
 import { fetchWithoutToken, petitionWithToken } from '../../../services/services';
-import Role from '../models/Role';
 
 export const getAllUsers = async (): Promise<User[]> => {
   const response = await petitionWithToken(usersUrlApi.users, '', 'GET');
@@ -12,13 +11,6 @@ export const getAllUsers = async (): Promise<User[]> => {
 
 export const getUserById = async (id: string): Promise<User> => {
   const url = `${usersUrlApi.users}/getById?id=${id}`;
-  const response = await petitionWithToken(url, '', 'GET');
-  const data = await response.json();
-  return data;
-};
-
-export const getRoles = async (): Promise<Role[]> => {
-  const url = `${usersUrlApi.users}/getRoles`;
   const response = await petitionWithToken(url, '', 'GET');
   const data = await response.json();
   return data;
@@ -42,8 +34,8 @@ export const updateUser = async (user: UpdateUserModel) => {
   }
 };
 
-export const DeleteUser = async (id: string) => {
-  const url = `${usersUrlApi.users}/?id=${id}`;
+export const deleteUser = async (id: string) => {
+  const url = `${usersUrlApi.users}?id=${id}`;
   const response = await petitionWithToken(url, '', 'DELETE');
 
   if (response.status >= 400) {

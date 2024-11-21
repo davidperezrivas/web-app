@@ -1,4 +1,4 @@
-import Role from "./Role";
+import Subscription from '../../Subscription/models/Subscription';
 
 export default interface User {
   id: string;
@@ -7,7 +7,9 @@ export default interface User {
   email: string;
   password: string;
   is_active: boolean;
-  role: Role
+  subscription: Subscription;
+  phone_number: string;
+  date_of_birth: string;
 }
 
 export default interface UserModal {

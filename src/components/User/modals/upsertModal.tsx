@@ -4,15 +4,27 @@ import { Inputs, ModalUserProps } from '../models';
 import Button from '../../../storybook/components/Button/Button';
 import SaveIcon from '../../../storybook/icons/save';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { updateUser, createUser, getUserById, getRoles } from '../services/users.service';
+import { updateUser, createUser, getUserById } from '../services/users.service';
 import User from '../models/Users';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import SkeletonTable from '../../../storybook/components/Skeleton/SkeletonTable';
+import Dropdown from '../../../storybook/components/Dropdown/Dropdown';
+import { getAllSubscription } from '../../Subscription/services/subscription.service';
+import Subscription from '../../Subscription/models/Subscription';
+import Toast from '../../../storybook/components/Toast/Toast';
+import { IToast } from '../../../storybook/components/Toast/interface';
 
 // Componente CreateModalUser: Modal para crear o actualizar un usuario
 const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalUserProps) => {
   // Estado local para gestionar errores
   const [error, setError] = useState({});
+
+  const [toats, setToast] = useState<IToast>({
+    show: false,
+    error: '',
+    type: 'error',
+  });
+
   // Cliente de consultas para la gestión de cache
   const queryClient = useQueryClient();
 
@@ -23,8 +35,15 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
     refetchOnWindowFocus: false, // Evita recargar datos al reenfocar la ventana
   });
 
+  // Hook useQuery para obtener los datos del usuario por id
+  const { data: subsData } = useQuery<Subscription[]>({
+    queryKey: ['getSubscriptions'],
+    queryFn: async () => getAllSubscription(),
+    refetchOnWindowFocus: false, // Evita recargar datos al reenfocar la ventana
+  });
+
   // Configuración de React Hook Form con valores predeterminados
-  const { register, handleSubmit, reset, watch, control } = useForm<Inputs>({
+  const { register, handleSubmit, reset, control } = useForm<Inputs>({
     defaultValues: {
       name: id ? data?.name : '',
       rut: id ? data?.rut : '',
@@ -32,6 +51,9 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
       password: id ? data?.password : '',
       confirmPassword: id ? data?.password : '',
       changePassword: false,
+      subscription: id ? data?.subscription?.id : '',
+      phone_number: id ? data?.phone_number : '',
+      date_of_birth: id ? data?.date_of_birth : '',
     },
   });
 
@@ -45,9 +67,22 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
         password: data?.password ?? '',
         confirmPassword: data?.password ?? '',
         changePassword: false,
+        subscription: data?.subscription?.id ?? '',
+        phone_number: data?.phone_number ?? '',
+        date_of_birth: data?.date_of_birth ?? '',
       });
     }
   }, [data, reset]);
+
+  // crea variable con los elementos para el dropdown
+  const subscriptionData = useMemo(() => {
+    return subsData?.map((subscription) => {
+      return {
+        value: subscription.id,
+        label: subscription.name,
+      };
+    });
+  }, [subsData]);
 
   // Configuración de la mutación para agregar un usuario
   const addUserMutation = useMutation({
@@ -55,6 +90,13 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
     onSuccess: () => {
       closeEvent(false);
       queryClient.invalidateQueries({ queryKey: ['getUsers'] });
+    },
+    onError: () => {
+      setToast({
+        ...toats,
+        show: true,
+        error: 'Ha ocurrido un error, comuniquese con el administrador.',
+      });
     },
   });
 
@@ -64,6 +106,13 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
     onSuccess: () => {
       closeEvent(false);
       queryClient.invalidateQueries({ queryKey: ['getUsers'] });
+    },
+    onError: () => {
+      setToast({
+        ...toats,
+        show: true,
+        error: 'Ha ocurrido un error, comuniquese con el administrador.',
+      });
     },
   });
 
@@ -94,16 +143,20 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
       error = { ...error, email: 'Email requerido' };
     }
 
-    if (formData.password === '') {
-      error = { ...error, password: 'Contraseña requerida' };
+    if (formData.subscription === '') {
+      error = { ...error, subscription: 'Favor seleccione un valor' };
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      error = { ...error, password: 'Las contraseñas no coinciden' };
+    if (formData.date_of_birth === '') {
+      error = { ...error, date_of_birth: 'Favor seleccione un valor' };
     }
 
-    if (formData.password.length < 6) {
-      error = { ...error, password: 'Mínimo 6 caracteres' };
+    if (formData.phone_number === '') {
+      error = { ...error, phone_number: 'Favor ingrese un valor' };
+    }
+
+    if (isNaN(formData.phone_number)) {
+      error = { ...error, phone_number: 'Ingrese un valor númerico' };
     }
 
     setError(error);
@@ -116,7 +169,7 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
    * @param data - Datos del formulario a enviar
    */
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const { name, rut, email, password, changePassword, role } = data;
+    const { name, rut, email, password = '123', date_of_birth, phone_number, subscription } = data;
 
     const isValid = formValidations(data);
 
@@ -126,13 +179,14 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
         rut,
         email,
         password,
-        role,
+        date_of_birth,
+        phone_number,
+        subscription,
       };
 
       const updateUser = {
         ...newUser,
         id,
-        changePassword,
       };
 
       // Condición para saber si es actualización o creación
@@ -143,9 +197,6 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
       }
     }
   };
-
-  // Estado para verificar si la opción de cambiar contraseña está seleccionada
-  const isChecked = watch('changePassword');
 
   return (
     <div
@@ -224,49 +275,46 @@ const CreateModalUser = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalU
                 />
               </div>
 
-              {/* Checkbox para actualizar contraseña */}
-              {id ? (
-                <div className="flex items-center">
-                  <input type="checkbox" id="changePassword" {...register('changePassword')} />
-                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                    Actualizar Contraseña
-                  </label>
-                </div>
-              ) : null}
-              {/* Campos de contraseña si es nuevo usuario o si la opción está activada */}
-              {isChecked || !id ? (
-                <>
-                  <div className="mb-6">
-                    <Input
-                      type="password"
-                      tittle="Contraseña"
-                      name="password"
-                      placeholders="Min 6 Caracteres"
-                      appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
-                      error={error}
-                      register={register}
-                    />
-                  </div>
+              <div>
+                <Input
+                  type="date"
+                  tittle="Fecha Nacimiento"
+                  name="date_of_birth"
+                  placeholders="Seleccione fecha nacimiento"
+                  appearance={error.hasOwnProperty('date_of_birth') ? 'error' : 'info'}
+                  error={error}
+                  register={register}
+                />
+              </div>
 
-                  <div className="mb-6">
-                    <Input
-                      type="password"
-                      tittle="Confirmar contraseña"
-                      name="confirmPassword"
-                      placeholders=""
-                      appearance={error.hasOwnProperty('password') ? 'error' : 'info'}
-                      error={error}
-                      register={register}
-                    />
-                  </div>
-                </>
-              ) : null}
+              <div>
+                <Dropdown
+                  control={control}
+                  fields={subscriptionData}
+                  tittle={'Subscripción'}
+                  name={'subscription'}
+                  appearance={error.hasOwnProperty('subscription') ? 'error' : 'info'}
+                  error={error}
+                />
+              </div>
+              <div>
+                <Input
+                  type="text"
+                  tittle="Telefono"
+                  name="phone_number"
+                  placeholders="ej: 9123456"
+                  appearance={error.hasOwnProperty('phone_number') ? 'error' : 'info'}
+                  error={error}
+                  register={register}
+                />
+              </div>
             </div>
 
             {/* Botón de guardar */}
             <section className="flex justify-end pb-4">
+              {toats.show ? <Toast text={toats.error} type={toats.type} /> : null}
               <div>
-                <Button text="Guardar" type="submit" icon={SaveIcon} status={'info'} />
+                <Button text="Guardar" type="submit" icon={<SaveIcon />} status={'info'} />
               </div>
             </section>
           </form>

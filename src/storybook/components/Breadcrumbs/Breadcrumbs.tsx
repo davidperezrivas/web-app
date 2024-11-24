@@ -35,7 +35,7 @@ const Breadcrumb = () => {
     return null;
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  /* eslint-disable react-hooks/exhaustive-deps */
   const breadcrumb = useMemo(() => {
     const path = location.pathname;
     const { menu } = login;
@@ -44,6 +44,7 @@ const Breadcrumb = () => {
 
     return breadcrumb;
   }, []);
+  /* eslint-disable react-hooks/exhaustive-deps */
 
   return (
     <nav className="flex pl-5 pt-5" aria-label="Breadcrumb">

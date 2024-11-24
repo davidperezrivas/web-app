@@ -6,7 +6,7 @@ import Input from '../../storybook/components/Input/Input';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Toast from '../../storybook/components/Toast/Toast';
-import { ConfirmRecoverPassword, RecoverPasswordForm } from './models/Forms';
+import { ConfirmRecoverPassword } from './models/Forms';
 import ShowPassword from '../../storybook/icons/showPassword';
 import HidePassword from '../../storybook/icons/hidePassword';
 import { updatePassword } from '../User/services/users.service';

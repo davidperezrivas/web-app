@@ -82,9 +82,11 @@ const Login = () => {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     logout();
   }, []);
+  /* eslint-disable react-hooks/exhaustive-deps */
 
   return (
     <div id="crud-modal" aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center ">

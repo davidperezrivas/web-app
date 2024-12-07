@@ -9,6 +9,8 @@ import Dashboard from '../components/Dashboard/Dashboard';
 import RecoverPassword from '../components/RecoverPassword/RecoverPassword';
 import FormRecoverPassword from '../components/RecoverPassword/RecoverPasswordForm';
 import Subscriptions from '../components/Subscription/Subscriptions';
+import Period from '../components/Period/Period';
+import Debt from '../components/Debt/Debt';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -33,12 +35,14 @@ function App() {
             <Route path="/users" element={<Users />}></Route>
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/subscriptions" element={<Subscriptions />}></Route>
+            <Route path="/period" element={<Period />}></Route>
+            <Route path="/debt" element={<Debt />}></Route>
           </Route>
 
           <Route path="/recoverPassword" element={<RecoverPassword />} />
           <Route path="/recoverPasswordForm/:token" element={<FormRecoverPassword />} />
           <Route path="/" element={<Login />}></Route>
-          <Route path="*" element={<Login />} />
+          <Route path="/*" element={<Dashboard />} />
         </Routes>
       </div>
     </div>

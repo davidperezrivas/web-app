@@ -14,9 +14,7 @@ const RecoverPassword = () => {
 
   const recoverPasswordMutation = useMutation({
     mutationFn: recoverPassword,
-    onSuccess: () => {
-      console.log('Todo ok');
-    },
+    onSuccess: () => {},
   });
 
   const { register, handleSubmit, reset } = useForm<RecoverPasswordForm>({

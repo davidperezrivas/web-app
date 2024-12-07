@@ -1,19 +1,18 @@
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 import Breadcrumb from '../../storybook/components/Breadcrumbs/Breadcrumbs';
 import Table from '../../storybook/components/Table/Table';
-
-import { useQuery } from '@tanstack/react-query';
-import Subsciption from './models/Subscription'; // Importando el modelo Subscription
-import { getAllSubscription } from './services/subscription.service'; // Servicio para obtener todas las suscripciones
-import PlusIcon from '../../storybook/icons/plus';
 import Button from '../../storybook/components/Button/Button';
 import Toast from '../../storybook/components/Toast/Toast';
 import SkeletonTable from '../../storybook/components/Skeleton/SkeletonTable';
-import { useMemo, useState } from 'react';
-import { ICellRendererParams } from 'ag-grid-community'; // Para el renderizado de celdas en la tabla
-import CreateModalUser from './modals/upsertModal'; // Modal para crear/actualizar suscripción
+import PlusIcon from '../../storybook/icons/plus';
 import EditIcon from '../../storybook/icons/edit';
 import DeleteIcon from '../../storybook/icons/delete';
+import CreateModalUser from './modals/upsertModal'; // Modal para crear/actualizar suscripción
 import DeleteModalSubs from './modals/deleteModal'; // Modal para eliminar suscripción
+import { getAllSubscription } from './services/subscription.service'; // Servicio para obtener todas las suscripciones
+import { ICellRendererParams } from 'ag-grid-community'; // Para el renderizado de celdas en la tabla
+import Subsciption from './models/Subscription'; // Importando el modelo Subscription
 
 const Subscriptions = () => {
   // Hook de React Query para obtener los datos de suscripciones
@@ -61,9 +60,8 @@ const Subscriptions = () => {
           }).format(params.value);
         },
       },
-
       {
-        headerName: '',
+        headerName: '', // Columna para botones de acción (editar y eliminar)
         cellRenderer: (props: ICellRendererParams<any, number>) => {
           return (
             <div className="flex justify-center items-center">

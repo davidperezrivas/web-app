@@ -22,9 +22,7 @@ const FormRecoverPassword = () => {
 
   const recoverPasswordMutation = useMutation({
     mutationFn: updatePassword,
-    onSuccess: () => {
-      console.log('Todo ok');
-    },
+    onSuccess: () => {},
     onError: () => {
       setShowToast({ show: true, msg: 'Ha ocurrido un error, intentelo nuevamente.' });
     },

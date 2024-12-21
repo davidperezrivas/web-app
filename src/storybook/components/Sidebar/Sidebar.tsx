@@ -1,28 +1,27 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC, useRef, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
-import { useAppSelector } from '../../../hooks/store';
-import { useUserActions } from '../../../hooks/useLoginActions';
+
 import { useNavigate } from 'react-router-dom';
 import { INavigate } from './models/sidebarOptions';
-import Finance from '../../icons/money';
+
+import Category from '../../icons/category';
+import Products from '../../icons/products';
+
+import Administration from '../../icons/administration';
+import Money from '../../icons/money';
+import Purchase from '../../icons/purchase';
 import CreditCard from '../../icons/creditCard';
-import Users from '../../icons/users';
-import Configuration from '../../icons/configuration';
-import Calendar from '../../icons/calendar';
-import Dolar from '../../icons/dolar';
+import Inventory from '../../icons/inventory';
 
 interface SidebarProps {
   setExpand: (value: boolean) => void;
 }
 
 const Navbar: FC<SidebarProps> = ({ setExpand }) => {
-  const login = useAppSelector((state) => state.login);
-  const { logout } = useUserActions();
   const navigate = useNavigate();
 
-  const username = login.user;
   const profilePic =
     'https://img.mbiz.web.id/180x180/erp/R2p1IXoyVEpBMk01WOEAdaI3hHVlkuIg0wW5_pn-CJCKHSrA_n1-U1tfE7Bl5H4_4Z7AxgL0DPOmUCdPuCHHC5lWvMU5Ig3t1uDrkVN53MlWlnA';
 
@@ -75,15 +74,39 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
 
   const generateIcon = (icon: string) => {
     var icons_map: Record<string, JSX.Element> = {};
-    icons_map['administration'] = <Configuration />;
-    icons_map['users'] = <Users />;
-    icons_map['subscription'] = <CreditCard />;
-    icons_map['finance'] = <Finance />;
-    icons_map['period'] = <Calendar />;
-    icons_map['dolar'] = <Dolar />;
+
+    icons_map['category'] = <Category />;
+    icons_map['products'] = <Products />;
+    icons_map['administration'] = <Administration />;
+    icons_map['money'] = <Money />;
+    icons_map['purchase'] = <Purchase />;
+    icons_map['sell'] = <CreditCard />;
+    icons_map['control'] = <Inventory />;
 
     return icons_map[icon];
   };
+
+  const menu = useMemo(() => {
+    return [
+      {
+        name: 'Mantenedores',
+        icon: 'administration',
+        children: [
+          { name: 'Categorias', icon: 'category', link: '/category' },
+          { name: 'Productos', icon: 'products', link: '/products' },
+        ],
+      },
+      {
+        name: 'Inventario',
+        icon: 'money',
+        children: [
+          { name: 'Compras', icon: 'purchase', link: '/purchase' },
+          { name: 'Ventas', icon: 'sell', link: '/sell' },
+          { name: 'Control', icon: 'control', link: '/control' },
+        ],
+      },
+    ];
+  }, []);
 
   const generateMenu = (item: any, index: number, recursive: number = 0) => {
     if (activeName === '' && activeLink.includes(item.link)) {
@@ -173,12 +196,7 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
     );
   };
 
-  const closeSesion = () => {
-    navigate('/');
-    logout();
-  };
-
-  return login.isLogin ? (
+  return (
     <nav
       role="navigation"
       className={[
@@ -225,29 +243,25 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
                   isExpand ? '' : isExpandOnHover ? '' : 'w-0 h-0 opacity-0'
                 }`}
               >
-                <p className="capitalize">Hola {username}</p>
+                <p className="capitalize">Hola Servitek</p>
               </div>
               <div
                 className={`duration-300 text-sm text-slate-500 truncate ${
                   isExpand ? '' : isExpandOnHover ? '' : 'w-0 h-0 opacity-0'
                 }`}
-              >
-                <a onClick={closeSesion} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                  Cerrar Sesion
-                </a>
-              </div>
+              ></div>
             </div>
 
             <div className="mt-3 mb-10 p-0">
               <ul className="list-none text-sm font-normal px-3">
-                {login.menu.map((item, index) => generateMenu(item, index))}
+                {menu.map((item, index) => generateMenu(item, index))}
               </ul>
             </div>
           </div>
         </SimpleBar>
       </div>
     </nav>
-  ) : null;
+  );
 };
 
 export default Navbar;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Finance = () => {
+const Money = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,4 +19,4 @@ const Finance = () => {
   );
 };
 
-export default Finance;
+export default Money;

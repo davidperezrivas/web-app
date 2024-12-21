@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import loginReducer from './login/slice';
+
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
@@ -9,9 +9,7 @@ const persistConfig = {
   whiteList: [],
 };
 
-const rootReducer = combineReducers({
-  login: loginReducer,
-});
+const rootReducer = combineReducers({});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

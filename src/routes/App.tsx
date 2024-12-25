@@ -6,6 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 import Category from '../components/Category/Category';
 import Dashboard from '../components/Dashboard/Dashboard';
 import Purchase from '../components/Purchase/Purchase';
+import Sell from '../components/Sell/Sell';
+import Inventory from '../components/Inventory/Inventory';
 
 function App() {
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
@@ -24,6 +26,8 @@ function App() {
           <Route path="/category" element={<Category />}></Route>
           <Route path="/purchase" element={<Purchase />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/sell" element={<Sell />}></Route>
+          <Route path="/control" element={<Inventory />}></Route>
 
           <Route path="*" element={<Dashboard />}></Route>
         </Routes>

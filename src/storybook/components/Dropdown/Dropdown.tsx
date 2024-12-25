@@ -2,7 +2,7 @@ import { Controller } from 'react-hook-form';
 import { DropdownProps } from './interface';
 import { useMemo } from 'react';
 
-const Dropdown = ({ control, fields, tittle, name, appearance, error }: DropdownProps) => {
+const Dropdown = ({ control, fields, tittle, name, appearance, error, onChangeFunction }: DropdownProps) => {
   const classConfig = useMemo(() => {
     const config = {
       error: {
@@ -27,7 +27,16 @@ const Dropdown = ({ control, fields, tittle, name, appearance, error }: Dropdown
         control={control}
         name={name}
         render={({ field }) => (
-          <select {...field} className={`${classConfig.input}`}>
+          <select
+            {...field}
+            className={`${classConfig.input}`}
+            onChange={(e) => {
+              field.onChange(e); // Actualiza el valor en react-hook-form
+              if (onChangeFunction) {
+                onChangeFunction(e.target); // Llama la función onChange opcional
+              }
+            }}
+          >
             <option key={'default'} value={''}>
               {'Seleccione un valor'}
             </option>

@@ -24,4 +24,10 @@ export interface DropdownProps {
    *
    */
   error?: any;
+
+  /*
+   *  funcion para el onchange
+   *
+   */
+  onChangeFunction?: any;
 }

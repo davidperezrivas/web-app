@@ -12,8 +12,6 @@ const allInventoryReport = ({ row }: any) => {
     creator: 'Servitek',
   });
 
-  console.log('data', row);
-
   let total = 0;
   const line = '____________________________________________________';
   row.forEach((inventory: any, index: number) => {

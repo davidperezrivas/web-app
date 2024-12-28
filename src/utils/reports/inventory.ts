@@ -24,9 +24,9 @@ const inventoryReport = ({ row }: any) => {
     creator: 'Servitek',
   });
 
-  const enterprise = row[0].enterprise_name;
-  const folio = row[0].folio;
-  const rut = row[0].enterprise_rut;
+  const enterprise = row[0]?.enterprise_name;
+  const folio = row[0]?.folio;
+  const rut = row[0]?.enterprise_rut;
   const line = '____________________________________________________';
 
   const total = row.reduce((acc: number, act: any) => {
@@ -66,7 +66,6 @@ const inventoryReport = ({ row }: any) => {
   });
 
   const finalHeight = 55 + Number(row.length) * 8;
-  console.log(row);
   doc.setFontSize(15);
   doc.setTextColor('#2B2B2B');
   doc.text(line, leftMargin, finalHeight);

@@ -2,7 +2,6 @@ import JSPDF from 'jspdf';
 import { formatNumber, formatTotal } from '../functions/formatNumbers';
 
 const sellReport = ({ row, allInventory }: any) => {
-  console.log(row);
   const leftMargin = 20;
 
   const doc = new JSPDF({
@@ -54,7 +53,6 @@ const sellReport = ({ row, allInventory }: any) => {
   });
 
   const finalHeight = 55 + Number(row.product.length) * 8;
-  // // console.log(row);
   doc.setFontSize(15);
   doc.setTextColor('#2B2B2B');
   doc.text(line, leftMargin, finalHeight);

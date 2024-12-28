@@ -28,10 +28,16 @@ const Inventory = () => {
   // Estados locales para la visibilidad de modales y mensajes
 
   const getBilling = (billingSelected: InventoryModel) => {
-    const agrupedElement = data?.filter(
-      (inv) =>
-        inv.enterprise_rut === billingSelected.enterprise_rut && inv.purchase_date === billingSelected.purchase_date,
-    );
+    if (!data || !Array.isArray(data)) {
+      console.warn('No data available');
+      return; // Evita ejecutar el código si `data` es undefined o no es un array.
+    }
+
+    const agrupedElement =
+      data?.filter(
+        (inv) =>
+          inv.enterprise_rut === billingSelected.enterprise_rut && inv.purchase_date === billingSelected.purchase_date,
+      ) ?? [];
 
     inventoryReport({ row: agrupedElement });
   };
@@ -43,7 +49,6 @@ const Inventory = () => {
   // Mapea los datos de usuarios para la tabla
   const rowData = useMemo(() => {
     return data?.map((inventory) => {
-      console.log(inventory);
       return {
         enterprise_name: inventory.enterprise_name,
         enterprise_rut: inventory.enterprise_rut,
@@ -114,12 +119,12 @@ const Inventory = () => {
         minWidth: 100,
       },
     ];
-  }, []);
+  }, [data]);
 
   useEffect(() => {
-    console.log('llega aqui1 ', gridRef);
-    console.log('llega aqui', filterText);
-    gridRef?.current?.api.setGridOption('quickFilterText', filterText);
+    if (gridRef?.current) {
+      gridRef?.current?.api?.setGridOption('quickFilterText', filterText);
+    }
   }, [filterText]);
 
   return (

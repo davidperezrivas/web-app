@@ -91,10 +91,7 @@ const Navbar: FC<SidebarProps> = ({ setExpand }) => {
       {
         name: 'Mantenedores',
         icon: 'administration',
-        children: [
-          { name: 'Categorias', icon: 'category', link: '/category' },
-          { name: 'Productos', icon: 'products', link: '/products' },
-        ],
+        children: [{ name: 'Categorias', icon: 'category', link: '/category' }],
       },
       {
         name: 'Inventario',

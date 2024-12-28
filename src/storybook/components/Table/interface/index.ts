@@ -8,4 +8,9 @@ export interface TableProps {
    * Información desplegada
    */
   information?: Array<any>;
+
+  /**
+   * Información desplegada
+   */
+  ref?: any;
 }

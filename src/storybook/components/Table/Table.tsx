@@ -5,7 +5,7 @@ import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
 
-const Table = ({ headers, information }: TableProps) => {
+const Table = ({ headers, information, ref }: TableProps) => {
   const gridOptions = {
     rowHeight: 50,
     defaultColDef: {
@@ -125,6 +125,7 @@ const Table = ({ headers, information }: TableProps) => {
         style={{ height: 500 }} // the grid will fill the size of the parent container
       >
         <AgGridReact
+          ref={ref}
           rowData={information}
           columnDefs={headers}
           gridOptions={gridOptions}

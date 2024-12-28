@@ -10,9 +10,10 @@ import { IToast } from '../../storybook/components/Toast/interface';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { decreaseInventory } from './services/purchase.service';
 import { getInventory } from '../Inventory/services/purchase.service';
-import IInventory from '../Inventory/models/Inventory';
+
 import { formatNumber } from '../../utils/functions/formatNumbers';
 import sellReport from '../../utils/reports/sellReport';
+import { IInventory } from '../Inventory/models/Inventory';
 
 const Sell = () => {
   // Cliente de consultas para la gestión de cache

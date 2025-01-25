@@ -11,6 +11,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import CategoryModel from '../Category/models/Category';
 import { getAllCategories } from '../Category/services/category.service';
 import { increaseInventory } from './services/purchase.service';
+import Input2 from '../../storybook/components/Input2/Input2';
 
 const Purchase = () => {
   // Cliente de consultas para la gestión de cache
@@ -141,7 +142,7 @@ const Purchase = () => {
             {/* Campos generales */}
             <div className="grid gap-6 grid-cols-4 mb-4">
               <div>
-                <Input
+                {/* <Input
                   type="text"
                   tittle="Proveedor"
                   name="enterprise_name"
@@ -149,7 +150,9 @@ const Purchase = () => {
                   register={register}
                   appearance={error.hasOwnProperty('enterprise_name') ? 'error' : 'info'}
                   error={error}
-                />
+                /> */}
+
+                <Input2 tittle={'Proveedor'} name={'enterprise_name'} errors={error} control={control} />
               </div>
               <div>
                 <Input

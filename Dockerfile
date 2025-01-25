@@ -1,5 +1,5 @@
 # Utiliza una imagen base de Node.js para construir la aplicación
-FROM node:18 AS build
+FROM node:22.11.0 AS build
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app

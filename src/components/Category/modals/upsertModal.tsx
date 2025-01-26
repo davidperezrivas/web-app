@@ -12,6 +12,7 @@ import SkeletonTable from '../../../storybook/components/Skeleton/SkeletonTable'
 import Toast from '../../../storybook/components/Toast/Toast';
 import { IToast } from '../../../storybook/components/Toast/interface';
 import CategoryModel from '../models/Category';
+import Input2 from '../../../storybook/components/Input2/Input2';
 
 // Componente CreateModalCategory: Modal para crear o actualizar un usuario
 const CreateModalCategory = ({ closeEvent, errorEvent, setErrorMessage, id }: ModalProps) => {
@@ -36,7 +37,7 @@ const CreateModalCategory = ({ closeEvent, errorEvent, setErrorMessage, id }: Mo
   });
 
   // Configuración de React Hook Form con valores predeterminados
-  const { register, handleSubmit, reset } = useForm<Inputs>({
+  const { register, handleSubmit, reset, control } = useForm<Inputs>({
     defaultValues: {
       name: id ? data?.name : '',
     },
@@ -176,14 +177,13 @@ const CreateModalCategory = ({ closeEvent, errorEvent, setErrorMessage, id }: Mo
             <div className="grid gap-6">
               {/* Campos de entrada */}
               <div>
-                <Input
+                <Input2
                   type="text"
-                  tittle="Nombre"
-                  name="name"
-                  placeholders="ej: Tornillos"
-                  appearance={error.hasOwnProperty('name') ? 'error' : 'info'}
-                  error={error}
-                  register={register}
+                  tittle={'Nombre'}
+                  name={'name'}
+                  errors={error}
+                  control={control}
+                  placeholder={'ej: Tornillos'}
                 />
               </div>
             </div>

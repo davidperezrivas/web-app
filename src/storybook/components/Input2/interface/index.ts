@@ -16,4 +16,16 @@ export interface InputProps {
    *
    */
   control: any;
+
+  /*
+   *  placeholder
+   *
+   */
+  placeholder: string;
+
+  /*
+   *  type
+   *
+   */
+  type?: string;
 }

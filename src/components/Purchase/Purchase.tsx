@@ -2,8 +2,7 @@ import { useMemo, useState } from 'react';
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
 import Button from '../../storybook/components/Button/Button';
 import Toast from '../../storybook/components/Toast/Toast';
-import Input from '../../storybook/components/Input/Input';
-import Dropdown from '../../storybook/components/Dropdown/Dropdown';
+
 import SaveIcon from '../../storybook/icons/save';
 import { Inputs } from './models';
 import { IToast } from '../../storybook/components/Toast/interface';
@@ -12,6 +11,8 @@ import CategoryModel from '../Category/models/Category';
 import { getAllCategories } from '../Category/services/category.service';
 import { increaseInventory } from './services/purchase.service';
 import Input2 from '../../storybook/components/Input2/Input2';
+
+import SelectAutoComplete from '../../storybook/components/Autocomplete/Select';
 
 const Purchase = () => {
   // Cliente de consultas para la gestión de cache
@@ -53,7 +54,6 @@ const Purchase = () => {
   });
 
   const {
-    register,
     handleSubmit,
     control,
     setError: setFormError,
@@ -70,7 +70,7 @@ const Purchase = () => {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: 'product',
   });
@@ -122,6 +122,9 @@ const Purchase = () => {
   };
 
   const categoryData = useMemo(() => {
+    if (!data) {
+      return [];
+    }
     return data?.map((category) => {
       return {
         label: category?.name,
@@ -142,49 +145,40 @@ const Purchase = () => {
             {/* Campos generales */}
             <div className="grid gap-6 grid-cols-4 mb-4">
               <div>
-                {/* <Input
-                  type="text"
-                  tittle="Proveedor"
-                  name="enterprise_name"
-                  placeholders="ej: Servitek"
-                  register={register}
-                  appearance={error.hasOwnProperty('enterprise_name') ? 'error' : 'info'}
-                  error={error}
-                /> */}
-
-                <Input2 tittle={'Proveedor'} name={'enterprise_name'} errors={error} control={control} />
-              </div>
-              <div>
-                <Input
-                  type="text"
-                  tittle="Rut Empresa"
-                  name="enterprise_rut"
-                  placeholders="ej: 99999999-9"
-                  register={register}
-                  appearance={error.hasOwnProperty('enterprise_rut') ? 'error' : 'info'}
-                  error={error}
+                <Input2
+                  tittle={'Proveedor'}
+                  name={'enterprise_name'}
+                  errors={error}
+                  control={control}
+                  placeholder={'ej: Servitek'}
                 />
               </div>
               <div>
-                <Input
-                  type="text"
-                  tittle="Folio Factura"
-                  name="folio"
-                  placeholders="ej: 999"
-                  register={register}
-                  appearance={error.hasOwnProperty('folio') ? 'error' : 'info'}
-                  error={error}
+                <Input2
+                  tittle={'Rut Empresa'}
+                  name={'enterprise_rut'}
+                  errors={error}
+                  control={control}
+                  placeholder={'ej: 99999999-9'}
                 />
               </div>
               <div>
-                <Input
+                <Input2
+                  tittle={'Folio Factura'}
+                  name={'folio'}
+                  errors={error}
+                  control={control}
+                  placeholder={'ej: 999'}
+                />
+              </div>
+              <div>
+                <Input2
+                  tittle={''}
+                  name={'purchase_date'}
+                  errors={error}
+                  control={control}
+                  placeholder={'Seleccione fecha compra'}
                   type="date"
-                  tittle="Fecha Compra"
-                  name="purchase_date"
-                  placeholders=""
-                  register={register}
-                  appearance={error.hasOwnProperty('purchase_date') ? 'error' : 'info'}
-                  error={error}
                 />
               </div>
             </div>
@@ -193,42 +187,41 @@ const Purchase = () => {
             {fields.map((field, index) => (
               <div key={field.id} className="grid gap-6 grid-cols-5 mb-4">
                 <div>
-                  <Input
-                    type="text"
-                    tittle="Producto"
+                  <Input2
+                    tittle={'Producto'}
                     name={`product.${index}.product`}
-                    placeholders="ej: 153"
-                    appearance="info"
-                    register={register}
+                    errors={error}
+                    control={control}
+                    placeholder="ej: Tornillos"
+                    type="text"
                   />
                 </div>
                 <div>
-                  <Dropdown
+                  <SelectAutoComplete
+                    name={`product.${index}.category`}
                     control={control}
                     fields={categoryData}
-                    tittle="Categoria"
-                    name={`product.${index}.category`}
-                    appearance="info"
+                    tittle={'Categorias'}
                   />
                 </div>
                 <div>
-                  <Input
-                    type="text"
-                    tittle="Cantidad"
+                  <Input2
+                    tittle={'Cantidad'}
                     name={`product.${index}.count`}
-                    placeholders="ej: 153"
-                    appearance="info"
-                    register={register}
+                    errors={error}
+                    control={control}
+                    placeholder="ej: 153"
+                    type="text"
                   />
                 </div>
                 <div>
-                  <Input
-                    type="text"
-                    tittle="Valor"
+                  <Input2
+                    tittle={'Valor'}
                     name={`product.${index}.last_value`}
-                    placeholders="ej: 153"
-                    appearance="info"
-                    register={register}
+                    errors={error}
+                    control={control}
+                    placeholder="ej: 153"
+                    type="text"
                   />
                 </div>
                 <div className="flex justify-center items-center">

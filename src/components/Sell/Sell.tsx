@@ -16,6 +16,7 @@ import sellReport from '../../utils/reports/sellReport';
 import { IInventory } from '../Inventory/models/Inventory';
 import Input2 from '../../storybook/components/Input2/Input2';
 import SelectAutoComplete from '../../storybook/components/Autocomplete/Select';
+import Grid from '@mui/material/Grid2';
 
 const Sell = () => {
   // Cliente de consultas para la gestión de cache
@@ -174,8 +175,9 @@ const Sell = () => {
         <section className="drop-shadow-md bg-white box-content box-border min-h-32 px-2 md:px-14 py-10">
           <form className="p-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             {/* Campos generales */}
-            <div className="grid gap-6 grid-cols-4 mb-4">
-              <div>
+
+            <Grid container spacing={4}>
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   type="text"
                   tittle={'Proveedor'}
@@ -184,8 +186,9 @@ const Sell = () => {
                   control={control}
                   placeholder="ej: Servitek"
                 />
-              </div>
-              <div>
+              </Grid>
+
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   type="text"
                   tittle={'Rut Empresa'}
@@ -194,8 +197,9 @@ const Sell = () => {
                   control={control}
                   placeholder="ej: 99999999-9"
                 />
-              </div>
-              <div>
+              </Grid>
+
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   type="text"
                   tittle={'Folio Factura'}
@@ -204,8 +208,9 @@ const Sell = () => {
                   control={control}
                   placeholder="ej: 999"
                 />
-              </div>
-              <div>
+              </Grid>
+
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   type="date"
                   tittle={''}
@@ -214,13 +219,13 @@ const Sell = () => {
                   control={control}
                   placeholder="Ingrese fecha Venta"
                 />
-              </div>
-            </div>
+              </Grid>
+            </Grid>
 
             {/* Sección dinámica de productos */}
             {fields.map((field, index) => (
-              <div key={field.id} className="grid gap-6 grid-cols-3 mb-4">
-                <div>
+              <Grid key={field.id} container spacing={4}>
+                <Grid size={{ xs: 3 }}>
                   <SelectAutoComplete
                     name={`product.${index}.product`}
                     control={control}
@@ -228,9 +233,9 @@ const Sell = () => {
                     tittle={'Productos'}
                     onChangeFunction={getCount}
                   />
-                </div>
+                </Grid>
 
-                <div>
+                <Grid size={{ xs: 3 }}>
                   <Input2
                     type="text"
                     tittle={'Cantidad'}
@@ -239,16 +244,34 @@ const Sell = () => {
                     control={control}
                     placeholder={showCount(`product.${index}.product`)}
                   />
-                </div>
+                </Grid>
 
-                <div className="flex justify-center items-center">
+                <Grid
+                  size={{ xs: 2 }}
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
                   <Button text="Eliminar" type="button" status="error" onClick={() => handleRemove(index)} />
+                </Grid>
 
+                <Grid
+                  size={{ xs: 3 }}
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
                   {fields.length === index + 1 && (
                     <Button text="Agregar Producto" type="button" status="info" onClick={() => handleAppend()} />
                   )}
-                </div>
-              </div>
+                </Grid>
+              </Grid>
             ))}
 
             <section className="flex justify-end pb-4">

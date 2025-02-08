@@ -13,6 +13,7 @@ import { increaseInventory } from './services/purchase.service';
 import Input2 from '../../storybook/components/Input2/Input2';
 
 import SelectAutoComplete from '../../storybook/components/Autocomplete/Select';
+import Grid from '@mui/material/Grid2';
 
 const Purchase = () => {
   // Cliente de consultas para la gestión de cache
@@ -143,8 +144,9 @@ const Purchase = () => {
         <section className="drop-shadow-md bg-white box-content box-border min-h-32 px-2 md:px-14 py-10">
           <form className="p-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             {/* Campos generales */}
-            <div className="grid gap-6 grid-cols-4 mb-4">
-              <div>
+
+            <Grid container spacing={4}>
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   tittle={'Proveedor'}
                   name={'enterprise_name'}
@@ -152,8 +154,9 @@ const Purchase = () => {
                   control={control}
                   placeholder={'ej: Servitek'}
                 />
-              </div>
-              <div>
+              </Grid>
+
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   tittle={'Rut Empresa'}
                   name={'enterprise_rut'}
@@ -161,8 +164,8 @@ const Purchase = () => {
                   control={control}
                   placeholder={'ej: 99999999-9'}
                 />
-              </div>
-              <div>
+              </Grid>
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   tittle={'Folio Factura'}
                   name={'folio'}
@@ -170,8 +173,8 @@ const Purchase = () => {
                   control={control}
                   placeholder={'ej: 999'}
                 />
-              </div>
-              <div>
+              </Grid>
+              <Grid size={{ xs: 3 }}>
                 <Input2
                   tittle={''}
                   name={'purchase_date'}
@@ -180,13 +183,13 @@ const Purchase = () => {
                   placeholder={'Seleccione fecha compra'}
                   type="date"
                 />
-              </div>
-            </div>
+              </Grid>
+            </Grid>
 
             {/* Sección dinámica de productos */}
             {fields.map((field, index) => (
-              <div key={field.id} className="grid gap-6 grid-cols-5 mb-4">
-                <div>
+              <Grid container spacing={4}>
+                <Grid size={{ xs: 2 }}>
                   <Input2
                     tittle={'Producto'}
                     name={`product.${index}.product`}
@@ -195,16 +198,17 @@ const Purchase = () => {
                     placeholder="ej: Tornillos"
                     type="text"
                   />
-                </div>
-                <div>
+                </Grid>
+
+                <Grid size={{ xs: 2 }}>
                   <SelectAutoComplete
                     name={`product.${index}.category`}
                     control={control}
                     fields={categoryData}
                     tittle={'Categorias'}
                   />
-                </div>
-                <div>
+                </Grid>
+                <Grid size={{ xs: 2 }}>
                   <Input2
                     tittle={'Cantidad'}
                     name={`product.${index}.count`}
@@ -213,8 +217,8 @@ const Purchase = () => {
                     placeholder="ej: 153"
                     type="text"
                   />
-                </div>
-                <div>
+                </Grid>
+                <Grid size={{ xs: 2 }}>
                   <Input2
                     tittle={'Valor'}
                     name={`product.${index}.last_value`}
@@ -223,15 +227,34 @@ const Purchase = () => {
                     placeholder="ej: 153"
                     type="text"
                   />
-                </div>
-                <div className="flex justify-center items-center">
-                  <Button text="Eliminar" type="button" status="error" onClick={() => handleRemove(index)} />
+                </Grid>
 
+                <Grid
+                  size={{ xs: 2 }}
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Button text="Eliminar" type="button" status="error" onClick={() => handleRemove(index)} />
+                </Grid>
+
+                <Grid
+                  size={{ xs: 2 }}
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
                   {fields.length === index + 1 && (
                     <Button text="Agregar Producto" type="button" status="info" onClick={() => handleAppend()} />
                   )}
-                </div>
-              </div>
+                </Grid>
+              </Grid>
             ))}
 
             <section className="flex justify-end pb-4">

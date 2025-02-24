@@ -57,7 +57,7 @@ const allInventoryReport = ({ row }: any) => {
 
     doc.text(productLines, leftMargin, currentHeight);
     doc.text(categoria.name, leftMargin + 60, currentHeight);
-    doc.text(formatCount, leftMargin + 110, currentHeight);
+    doc.text(formatCount, leftMargin + 125, currentHeight);
     doc.text(formatValue, leftMargin + 150, currentHeight);
 
     currentHeight += productHeight + 2; // Ajuste dinámico

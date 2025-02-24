@@ -44,6 +44,8 @@ const Purchase = () => {
         purchase_date: '',
         product: [{ product: '', count: 0, last_value: 0, category: '' }],
       });
+
+      replace([{ product: '', count: 0, last_value: 0, category: '' }]); // 🛠 Asegura que el array se reinicie
     },
     onError: () => {
       setToast({
@@ -71,7 +73,7 @@ const Purchase = () => {
     },
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, replace } = useFieldArray({
     control,
     name: 'product',
   });

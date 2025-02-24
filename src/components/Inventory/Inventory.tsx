@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { getInventory } from './services/purchase.service';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteInventoryElement, getInventory } from './services/purchase.service';
 import PlusIcon from '../../storybook/icons/plus';
 import Button from '../../storybook/components/Button/Button';
 import SkeletonTable from '../../storybook/components/Skeleton/SkeletonTable';
@@ -15,10 +15,16 @@ import allInventoryReport from '../../utils/reports/allInventory';
 import { AgGridReact } from 'ag-grid-react';
 import { gridOptions } from '../../utils/configs/ag-grid';
 import TextField from '@mui/material/TextField';
+import Delete from '../../storybook/icons/delete';
+import { IToast } from '../../storybook/components/Toast/interface';
+import DeleteModalInventory from './modal/deleteModal';
 
 const Inventory = () => {
   const gridRef = useRef<AgGridReact>(null);
   const [filterText, setFilterText] = useState('');
+  const [selectedInventory, setSelectedInventory] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+
   // Hook para obtener datos de usuarios con React Query
   const { isLoading, data } = useQuery<InventoryModel[]>({
     queryKey: ['getInventory'],
@@ -40,17 +46,20 @@ const Inventory = () => {
           inv.enterprise_rut === billingSelected.enterprise_rut && inv.purchase_date === billingSelected.purchase_date,
       ) ?? [];
 
-    inventoryReport({ row: agrupedElement });
+    const pdfUrl = inventoryReport({ row: agrupedElement });
+    window.open(pdfUrl); // Abre la vista previa en una nueva pestaña
   };
 
   const getAllBilling = () => {
-    allInventoryReport({ row: data });
+    const pdfUrl = allInventoryReport({ row: data });
+    window.open(pdfUrl); // Abre la vista previa en una nueva pestaña
   };
 
   // Mapea los datos de usuarios para la tabla
   const rowData = useMemo(() => {
     return data?.map((inventory) => {
       return {
+        id: inventory.id,
         enterprise_name: inventory.enterprise_name,
         enterprise_rut: inventory.enterprise_rut,
         folio: inventory.folio,
@@ -101,7 +110,7 @@ const Inventory = () => {
       },
 
       {
-        headerName: 'Ver Factura',
+        headerName: 'Acciones',
         cellRenderer: (props: ICellRendererParams<any, number>) => {
           return (
             <div className="flex justify-center items-center">
@@ -112,6 +121,16 @@ const Inventory = () => {
                 icon={<Eye />}
                 onClick={() => {
                   getBilling(props.data);
+                }}
+              />
+
+              <Button
+                text={''}
+                status={'error'}
+                icon={<Delete />}
+                onClick={() => {
+                  setSelectedInventory(props.data.id);
+                  setOpenModal(true);
                 }}
               />
             </div>
@@ -214,6 +233,7 @@ const Inventory = () => {
           </section>
         </section>
       </section>
+      {openModal && <DeleteModalInventory id={selectedInventory} closeEvent={setOpenModal} />}
     </section>
   );
 };

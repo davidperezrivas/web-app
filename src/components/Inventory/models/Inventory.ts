@@ -1,4 +1,5 @@
 export interface IInventory {
+  id: string;
   product: string;
   avg_value: number;
   last_value: number;
@@ -11,6 +12,7 @@ export interface IInventory {
 }
 
 export interface InventoryModel {
+  id: string;
   product: string;
   avg_value: number;
   last_value: number;
@@ -20,4 +22,9 @@ export interface InventoryModel {
   enterprise_name: string;
   purchase_date: string;
   categoria: any;
+}
+
+export interface ModalDeleteProps {
+  closeEvent: React.Dispatch<React.SetStateAction<boolean>>;
+  id: string;
 }

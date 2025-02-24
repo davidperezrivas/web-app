@@ -2,8 +2,6 @@ import { useMemo, useState } from 'react';
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
 import Button from '../../storybook/components/Button/Button';
 import Toast from '../../storybook/components/Toast/Toast';
-import Input from '../../storybook/components/Input/Input';
-import Dropdown from '../../storybook/components/Dropdown/Dropdown';
 import SaveIcon from '../../storybook/icons/save';
 import { Inputs } from './models';
 import { IToast } from '../../storybook/components/Toast/interface';
@@ -43,7 +41,8 @@ const Sell = () => {
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ['getCategories'] });
 
-      sellReport({ row: variables, allInventory: inventoryInfo });
+      const pdfUrl = sellReport({ row: variables, allInventory: inventoryInfo });
+      window.open(pdfUrl); // Abre la vista previa en una nueva pestaña
 
       reset({
         folio: '',
@@ -63,7 +62,6 @@ const Sell = () => {
   });
 
   const {
-    register,
     handleSubmit,
     control,
     setError: setFormError,

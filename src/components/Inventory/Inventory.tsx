@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteInventoryElement, getInventory } from './services/purchase.service';
+import { useQuery } from '@tanstack/react-query';
+import { getInventory } from './services/purchase.service';
 import PlusIcon from '../../storybook/icons/plus';
 import Button from '../../storybook/components/Button/Button';
 import SkeletonTable from '../../storybook/components/Skeleton/SkeletonTable';
@@ -16,14 +16,18 @@ import { AgGridReact } from 'ag-grid-react';
 import { gridOptions } from '../../utils/configs/ag-grid';
 import TextField from '@mui/material/TextField';
 import Delete from '../../storybook/icons/delete';
-import { IToast } from '../../storybook/components/Toast/interface';
 import DeleteModalInventory from './modal/deleteModal';
+import Update from '../../storybook/icons/update';
+import EditIcon from '../../storybook/icons/edit';
+import UpdateModalProduct from './modal/upsertModal';
 
 const Inventory = () => {
   const gridRef = useRef<AgGridReact>(null);
   const [filterText, setFilterText] = useState('');
   const [selectedInventory, setSelectedInventory] = useState('');
+  const [selectedUpdateInventory, setSelectedUpdateInventory] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
 
   // Hook para obtener datos de usuarios con React Query
   const { isLoading, data } = useQuery<InventoryModel[]>({
@@ -70,6 +74,7 @@ const Inventory = () => {
         avg_value: inventory.avg_value,
         purchase_date: inventory.purchase_date,
         total: inventory.avg_value * inventory.count,
+        categoryValues: inventory.categoria,
       };
     });
   }, [data]);
@@ -111,6 +116,7 @@ const Inventory = () => {
 
       {
         headerName: 'Acciones',
+        flex: 1,
         cellRenderer: (props: ICellRendererParams<any, number>) => {
           return (
             <div className="flex justify-center items-center">
@@ -133,10 +139,20 @@ const Inventory = () => {
                   setOpenModal(true);
                 }}
               />
+
+              <Button
+                text={''}
+                status={'warning'}
+                icon={<EditIcon />}
+                onClick={() => {
+                  setSelectedUpdateInventory(props.data);
+                  setOpenModalUpdate(true);
+                }}
+              />
             </div>
           );
         },
-        minWidth: 100,
+        minWidth: 200,
       },
     ];
   }, [data]);
@@ -208,15 +224,15 @@ const Inventory = () => {
           </section>
 
           {/* Renderiza Skeleton mientras carga o la tabla de usuarios */}
-          <section className="min-h-full">
+          <section className="min-h-full  overflow-x-auto overflow-y-auto max-h-[900px]">
             {isLoading ? (
               <SkeletonTable />
             ) : (
               <>
-                <div className="relative overflow-x-auto">
+                <div className="relative overflow-x-auto overflow-y-auto">
                   <div
                     className="ag-theme-quartz" // applying the grid theme
-                    style={{ height: 700 }} // the grid will fill the size of the parent container
+                    style={{ height: '70vh' }} // the grid will fill the size of the parent container
                   >
                     <AgGridReact
                       ref={gridRef}
@@ -234,6 +250,7 @@ const Inventory = () => {
         </section>
       </section>
       {openModal && <DeleteModalInventory id={selectedInventory} closeEvent={setOpenModal} />}
+      {openModalUpdate && <UpdateModalProduct information={selectedUpdateInventory} closeEvent={setOpenModalUpdate} />}
     </section>
   );
 };
